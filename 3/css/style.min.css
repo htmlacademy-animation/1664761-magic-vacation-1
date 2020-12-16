@@ -1869,13 +1869,13 @@ img {
     transition: color .5s; }
     .page-header__menu a::after {
       content: "";
-      position: absolute;
-      bottom: 0;
       width: 0;
       height: 2px;
       background-color: #ffffff;
-      left: 0;
-      transition: background-color .3s, width .5s; }
+      position: absolute;
+      bottom: 0;
+      right: 0;
+      transition: background-color .3s, width .3s; }
       @media (max-width: 1024px) and (orientation: portrait) {
         .page-header__menu a::after {
           left: 0;
@@ -1887,12 +1887,16 @@ img {
           right: 0;
           background-color: #5f458c; } }
     .page-header__menu a.active::after {
-      width: 100%; }
+      width: 100%;
+      right: auto;
+      left: 0; }
     .page-header__menu a:hover, .page-header__menu a:focus {
       color: #a67ee5;
       outline: none; }
       .page-header__menu a:hover::after, .page-header__menu a:focus::after {
         width: 100%;
+        right: auto;
+        left: 0;
         background-color: #a67ee5; }
 
 .page-header__social {
