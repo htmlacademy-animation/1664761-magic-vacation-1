@@ -13,7 +13,9 @@ export default class FullPageScroll {
   }
 
   init() {
-    document.addEventListener(`wheel`, throttle(this.onScrollHandler, this.THROTTLE_TIMEOUT, {trailing: true}));
+    document.addEventListener(`wheel`, throttle(this.onScrollHandler, this.THROTTLE_TIMEOUT, {
+      trailing: true
+    }));
     window.addEventListener(`popstate`, this.onUrlHashChengedHandler);
 
     this.onUrlHashChanged();
@@ -34,7 +36,16 @@ export default class FullPageScroll {
   }
 
   changePageDisplay() {
-    this.changeVisibilityDisplay();
+    let preloadBg = document.querySelector('.bg-fill');
+    if (this.screenElements[this.activeScreen].classList.contains('screen--prizes')) {
+      preloadBg.classList.add(`active`);
+      setTimeout(() => {
+        this.changeVisibilityDisplay();
+        preloadBg.classList.remove(`active`);
+      }, 700);
+    } else {
+      this.changeVisibilityDisplay();
+    }
     this.changeActiveMenuItem();
     this.emitChangeDisplayEvent();
   }
@@ -45,10 +56,10 @@ export default class FullPageScroll {
       screen.classList.remove(`active`);
     });
     this.screenElements[this.activeScreen].classList.remove(`screen--hidden`);
+
     setTimeout(() => {
       this.screenElements[this.activeScreen].classList.add(`active`);
     }, 100);
-    
   }
 
   changeActiveMenuItem() {
