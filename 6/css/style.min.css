@@ -1512,7 +1512,8 @@ img {
   position: fixed;
   left: 0;
   z-index: 100;
-  opacity: 0.5; }
+  opacity: 0.5;
+  display: none; }
 
 .game__button {
   margin: 0 30px 30px;
@@ -1549,7 +1550,7 @@ img {
   letter-spacing: -0.04em; }
   @media (min-width: 2000px) {
     .intro__title {
-      max-width: 990px;
+      max-width: 1000px;
       font-size: 120px; } }
   @media (max-width: 1024px) and (orientation: portrait) {
     .intro__title {
