@@ -32,13 +32,7 @@ class AccentTypographyBuild {
     span.textContent = letter;
     span.style.transition = `${this._property} ${this._timer}ms ease ${this._timeOffset}ms`;
 
-    console.log(index);
-
-    if ((index % 2) == 0) {
-      this._timeOffset += 60;
-    } else {
-      this._timeOffset -= 20;
-    }
+    this._timeOffset = Math.floor(Math.random() * 400);
 
     return span;
   }
@@ -92,5 +86,3 @@ animText('.slider__item-title');
 animText('.prizes__title');
 animText('.rules__title');
 animText('.game__title');
-
-
