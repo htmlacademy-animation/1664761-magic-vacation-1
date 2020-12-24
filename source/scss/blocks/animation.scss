@@ -128,3 +128,43 @@
     }
   }
   
+
+
+
+
+
+  @keyframes showPagination {
+    to {
+      opacity: 1;
+      transform: translateX(0) rotate(0);
+    }
+  }
+  
+  @keyframes showPaginationNums {
+    to {
+      opacity: 1;
+    }
+  }
+  
+
+
+
+  @keyframes resultBtnShow {
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes resultBtnRotate {
+    to {
+      transform: translateX(0) rotate(0);
+    }
+  }
+
+
+
+  @keyframes showFooterText {
+    to {
+      opacity: 1;
+    }
+  }
