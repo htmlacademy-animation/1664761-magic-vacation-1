@@ -3730,11 +3730,17 @@ img {
     .screen__footer.screen__footer--full .screen__footer-wrapper {
       transition: opacity .5s .5s; } }
 
-.prizes__item--cases .prizes__icon {
-  width: 26.8rem; }
+@media screen and (min-width: 2000px) {
+  .prizes__item--cases .prizes__icon {
+    width: 268px; }
+  .prizes__item--cases .prizes__desc {
+    margin-top: 37px; } }
 
-.prizes__item--cases .prizes__desc {
-  margin-top: 4rem; }
+@media screen and (max-width: 2000px) {
+  .prizes__item--cases .prizes__icon {
+    width: 26.8rem; }
+  .prizes__item--cases .prizes__desc {
+    margin-top: 4rem; } }
 
 
 /*# sourceMappingURL=style.min.css.map*/
