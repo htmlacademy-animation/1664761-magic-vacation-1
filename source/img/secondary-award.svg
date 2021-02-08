@@ -47,9 +47,12 @@
 
   <g opacity="0">
     <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".1s" fill="freeze" begin=".5s"></animate>
-    <line id="bot-line" x1="41.13" y1="329" x2="100" y2="329" fill="none" stroke="#fff" stroke-width="2" />
-    <animate xlink:href="#bot-line" attributeName="x2" from="100" to="319.13" dur=".2s" fill="freeze" begin=".6s"></animate>
-    <animate xlink:href="#bot-line" attributeName="x1" from="41.13" to="147.13" dur=".2s" fill="freeze" begin=".8s"></animate>
+    <!-- <animate attributeType="CSS" attributeName="opacity" from="0" to="1" dur=".3s" fill="freeze" begin="3.85s"></animate> -->
+    <g>
+      <line id="bot-line" x1="41.13" y1="329" x2="100" y2="329" fill="none" stroke="#fff" stroke-width="2" />
+      <animate xlink:href="#bot-line" attributeName="x2" from="100" to="319.13" dur=".2s" fill="freeze" begin=".6s"></animate>
+      <animate xlink:href="#bot-line" attributeName="x1" from="41.13" to="147.13" dur=".2s" fill="freeze" begin=".8s"></animate>
+    </g>
   </g>
 
   <g id="suit" transform="translate(-220, -275)" opacity="0" transform-origin="bottom">
