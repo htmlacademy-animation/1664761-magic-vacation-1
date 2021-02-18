@@ -3,6 +3,10 @@ document.addEventListener("DOMContentLoaded", function () {
   let bodyDOM = document.querySelector('body');
 
   bodyDOM.classList.add('show-anim');
+
+  const path = document.querySelector('#string3-1');
+  const pathLength = path.getTotalLength();
+  console.log(pathLength);
 });
 
 
