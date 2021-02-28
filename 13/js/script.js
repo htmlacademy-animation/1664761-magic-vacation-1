@@ -10212,6 +10212,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+
 document.addEventListener("DOMContentLoaded", function () {
 
   let bodyDOM = document.querySelector('body');
@@ -10302,33 +10303,8 @@ animText('.rules__title');
 animText('.game__title');
 
 
-// АНИМАЦИЯ ТАЙМЕРА
-let start = Date.now(),
-  end = start + 300000,
-  minuteDOM = document.querySelector('.game__counter span:first-child'),
-  secondeDOM = document.querySelector('.game__counter span:last-child'),
-  remainingTime,
-  remainingMin,
-  remainingSec;
 
-function countTime() {
-  remainingTime = end - Date.now();
 
-  remainingSec = ('0' + Math.floor((remainingTime / 1000) % 60)).slice(-2);
-  remainingMin = ('0' + Math.floor((remainingTime / (60 * 1000)) % 60)).slice(-2);
-
-  minuteDOM.textContent = remainingMin;
-  secondeDOM.textContent = remainingSec;
-
-  if (remainingTime > 0) {
-    requestAnimationFrame(countTime);
-  } else {
-    minuteDOM.textContent = '00';
-    secondeDOM.textContent = '00';
-  }
-}
-
-requestAnimationFrame(countTime);
 
 /***/ }),
 
@@ -10402,6 +10378,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "default", function() { return FullPageScroll; });
 /* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! lodash/throttle */ "./node_modules/lodash/throttle.js");
 /* harmony import */ var lodash_throttle__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_throttle__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _timer_js__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./timer.js */ "./source/js/modules/timer.js");
+
+
 
 
 class FullPageScroll {
@@ -10449,7 +10428,7 @@ class FullPageScroll {
     }
     if (this.screenElements[this.activeScreen].classList.contains('screen--prizes')) {
       preloadBg.classList.add(`active`);
-      removeStoryClass()
+      removeStoryClass();
       setTimeout(() => {
         this.changeVisibilityDisplay();
         preloadBg.classList.remove(`active`);
@@ -10462,6 +10441,10 @@ class FullPageScroll {
 
       }, 100);
       this.changeVisibilityDisplay();
+    } else if ((this.screenElements[this.activeScreen].classList.contains('screen--game'))) {
+      removeStoryClass();
+      this.changeVisibilityDisplay();
+      Object(_timer_js__WEBPACK_IMPORTED_MODULE_1__["default"])();
     } else {
       removeStoryClass();
       this.changeVisibilityDisplay();
@@ -10781,6 +10764,60 @@ __webpack_require__.r(__webpack_exports__);
   socialBlock.addEventListener(`mouseleave`, function () {
     socialBlock.classList.remove(`social-block--active`);
   });
+});
+
+
+/***/ }),
+
+/***/ "./source/js/modules/timer.js":
+/*!************************************!*\
+  !*** ./source/js/modules/timer.js ***!
+  \************************************/
+/*! exports provided: default */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony default export */ __webpack_exports__["default"] = (() => {
+  let start = Date.now(),
+    end = start + 300000,
+    minuteDOM = document.querySelector('.game__counter span:first-child'),
+    secondeDOM = document.querySelector('.game__counter span:last-child'),
+    fpsInterval = 1000 / 12,
+    remainingTime,
+    remainingMin,
+    remainingSec,
+    elapsed,
+    now;
+
+  function fpsCounter() {
+    now = Date.now();
+    elapsed = now - start;
+
+    requestAnimationFrame(fpsCounter);
+    if (elapsed > fpsInterval) {
+      start = now - (elapsed % fpsInterval);
+      countTime();
+    }
+  }
+
+  fpsCounter();
+
+  function countTime() {
+    remainingTime = end - Date.now();
+
+    remainingSec = ('0' + Math.floor((remainingTime / 1000) % 60)).slice(-2);
+    remainingMin = ('0' + Math.floor((remainingTime / (60 * 1000)) % 60)).slice(-2);
+
+    if (remainingTime > 0) {
+      minuteDOM.textContent = remainingMin;
+      secondeDOM.textContent = remainingSec;
+    } else {
+      minuteDOM.textContent = '00';
+      secondeDOM.textContent = '00';
+    }
+  }
+
 });
 
 
