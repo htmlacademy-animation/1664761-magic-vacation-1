@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", function () {
 
   let bodyDOM = document.querySelector('body');
@@ -88,30 +89,4 @@ animText('.rules__title');
 animText('.game__title');
 
 
-// АНИМАЦИЯ ТАЙМЕРА
-let start = Date.now(),
-  end = start + 300000,
-  minuteDOM = document.querySelector('.game__counter span:first-child'),
-  secondeDOM = document.querySelector('.game__counter span:last-child'),
-  remainingTime,
-  remainingMin,
-  remainingSec;
 
-function countTime() {
-  remainingTime = end - Date.now();
-
-  remainingSec = ('0' + Math.floor((remainingTime / 1000) % 60)).slice(-2);
-  remainingMin = ('0' + Math.floor((remainingTime / (60 * 1000)) % 60)).slice(-2);
-
-  minuteDOM.textContent = remainingMin;
-  secondeDOM.textContent = remainingSec;
-
-  if (remainingTime > 0) {
-    requestAnimationFrame(countTime);
-  } else {
-    minuteDOM.textContent = '00';
-    secondeDOM.textContent = '00';
-  }
-}
-
-requestAnimationFrame(countTime);

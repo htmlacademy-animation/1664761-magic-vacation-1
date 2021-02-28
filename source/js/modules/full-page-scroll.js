@@ -1,4 +1,6 @@
 import throttle from 'lodash/throttle';
+import timer from './timer.js';
+
 
 export default class FullPageScroll {
   constructor() {
@@ -45,7 +47,7 @@ export default class FullPageScroll {
     }
     if (this.screenElements[this.activeScreen].classList.contains('screen--prizes')) {
       preloadBg.classList.add(`active`);
-      removeStoryClass()
+      removeStoryClass();
       setTimeout(() => {
         this.changeVisibilityDisplay();
         preloadBg.classList.remove(`active`);
@@ -58,6 +60,10 @@ export default class FullPageScroll {
 
       }, 100);
       this.changeVisibilityDisplay();
+    } else if ((this.screenElements[this.activeScreen].classList.contains('screen--game'))) {
+      removeStoryClass();
+      this.changeVisibilityDisplay();
+      timer();
     } else {
       removeStoryClass();
       this.changeVisibilityDisplay();
