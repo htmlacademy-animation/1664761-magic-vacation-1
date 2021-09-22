@@ -8,7 +8,7 @@ import result from './modules/result.js';
 import form from './modules/form.js';
 import social from './modules/social.js';
 import FullPageScroll from './modules/full-page-scroll';
-import custom from './modules/custom';
+import typographyAnimation from './modules/typography-animation';
 
 // init modules
 mobileHeight();
@@ -19,6 +19,7 @@ chat();
 result();
 form();
 social();
+typographyAnimation();
 
 const fullPageScroll = new FullPageScroll();
 fullPageScroll.init();

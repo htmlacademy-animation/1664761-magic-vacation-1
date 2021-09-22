@@ -1,11 +1,11 @@
 root: true
 
 env:
-  es6: true
+  es5: true
   browser: true
 
 extends:
-  htmlacademy/es6
+  htmlacademy/es5
 
 parserOptions:
   ecmaVersion: 2018
