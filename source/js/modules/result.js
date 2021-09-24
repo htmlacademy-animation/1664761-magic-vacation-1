@@ -27,9 +27,9 @@ export default () => {
           }
 
           let seacalfCanvasAnimate = new seacalfScene({
-              canvas: document.querySelector("#seacalf-canvas")
-            });
-            
+            canvas: document.querySelector("#seacalf-canvas")
+          });
+
           seacalfCanvasAnimate.startAnimation();
 
         } else if (target == 'result2') {

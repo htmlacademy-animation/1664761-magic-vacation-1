@@ -1,261 +1,127 @@
 import Animation from "../helpers/animate.js";
-import easing from "../helpers/utilities.js";
+import easing from "../helpers/utilities";
+import canvasScene from "../helpers/canvasScene";
 
-export default class seacalfScene {
+const ice = {
+  objectId: "ice",
+  url: "./img/module-4/win-primary-images/ice.png",
+  x: 50,
+  y: 69,
+  size: 49,
+  opacity: 0,
+  transforms: {
+    translateY: 30,
+  },
+};
+const seaCalf = {
+  objectId: "seaCalf",
+  url: "./img/module-4/win-primary-images/sea-calf-2.png",
+  x: 48,
+  y: 60,
+  size: 57,
+  opacity: 0,
+  transforms: {
+    translateY: 30,
+  },
+};
+const snowFlake1 = {
+  objectId: "snowFlake1",
+  url: "./img/module-4/win-primary-images/snowflake.png",
+  x: 23,
+  y: 55,
+  size: 26,
+  opacity: 0,
+  transforms: {
+    rotate: -30,
+  },
+};
+const snowFlake2 = {
+  objectId: "snowFlake2",
+  url: "./img/module-4/win-primary-images/snowflake.png",
+  x: 75,
+  y: 65,
+  size: 19,
+  opacity: 0,
+  transforms: {
+    rotate: 30,
+    scaleX: -1,
+  },
+};
+const plane = {
+  objectId: "plane",
+  url: "./img/module-4/win-primary-images/airplane.png",
+  x: 95,
+  y: 45,
+  size: 15,
+  opacity: 0,
+  transforms: {
+    translateY: -10,
+  },
+};
+const tree1 = {
+  objectId: "tree1",
+  url: "./img/module-4/win-primary-images/tree-2.png",
+  x: 60,
+  y: 55,
+  size: 5,
+  opacity: 0,
+  transforms: {
+    translateY: 30,
+  },
+};
+const tree2 = {
+  objectId: "tree2",
+  url: "./img/module-4/win-primary-images/tree.png",
+  x: 64,
+  y: 58,
+  size: 4,
+  opacity: 0,
+  transforms: {
+    translateY: 30,
+  },
+};
+
+const sceneObjectsArr = [
+  plane,
+  tree1,
+  tree2,
+  ice,
+  seaCalf,
+  snowFlake1,
+  snowFlake2,
+];
+
+const local = {
+  blob: {
+    centerX: 40,
+    centerY: 55,
+    radius: 15,
+    endX: 91,
+    endY: 49,
+    angle: 30,
+    deltasLength: 10,
+    opacity: 0,
+  },
+};
+
+export default class seacalfScene extends canvasScene {
   constructor(options) {
-    this.canvas = options.canvas;
-    this.ctx = this.canvas.getContext("2d");
-    this.canvas.width = 1000;
-    this.canvas.height = 1000;
+    const canvas = options.canvas;
 
-    this.size = 1000;
+    super({
+      canvas: canvas,
+      sceneObjects: sceneObjectsArr,
+    });
 
-    this.airplaneImg = new Image();
-    this.iceImg = new Image();
-    this.seaCalfImg = new Image();
-    this.snowFlake1Img = new Image();
-    this.snowFlake2Img = new Image();
-    this.tree1Img = new Image();
-    this.tree2Img = new Image();
-
-    this.loadingCounter = 0;
-
-    this.ice = {
-      img: this.iceImg,
-      x: 50,
-      y: 69,
-      size: 49,
-      opacity: 0,
-      transforms: {
-        translateY: 30,
-      },
+    this.afterInit = () => {
+      this.objectsScene.plane.before = this.drawBlob.bind(this);
     };
 
-    this.seaCalf = {
-      img: this.seaCalfImg,
-      x: 48,
-      y: 60,
-      size: 57,
-      opacity: 0,
-      transforms: {
-        translateY: 30,
-      },
-    };
-
-    this.snowFlake1 = {
-      img: this.snowFlake1Img,
-      x: 23,
-      y: 55,
-      size: 26,
-      opacity: 0,
-      transforms: {
-        rotate: -30
-      },
-    };
-
-    this.snowFlake2 = {
-      img: this.snowFlake2Img,
-      x: 75,
-      y: 65,
-      size: 19,
-      opacity: 0,
-      transforms: {
-        rotate: 30,
-        scaleX: -1,
-      },
-    };
-
-    this.blob = {
-      centerX: 40,
-      centerY: 55,
-      radius: 15,
-      endX: 91,
-      endY: 49,
-      angle: 30,
-      deltasLength: 10,
-      opacity: 0,
-    };
-
-    this.plane = {
-      img: this.airplaneImg,
-      x: 95,
-      y: 45,
-      size: 15,
-      opacity: 0,
-      transforms: {
-        translateY: -10,
-      },
-    };
-
-    this.tree1 = {
-      img: this.tree2Img,
-      x: 60,
-      y: 55,
-      size: 5,
-      opacity: 0,
-      transforms: {
-        translateY: 30,
-      },
-    };
-
-    this.tree2 = {
-      img: this.tree1Img,
-      x: 64,
-      y: 58,
-      size: 4,
-      opacity: 0,
-      transforms: {
-        translateY: 30,
-      },
-    };
-
-    this.imagesSrc();
-    this.initEventListeners();
-
-    this.animations = [];
-
-    this.updateSize();
-    this.ininResizeListener();
-  }
-
-  //АДАПТИВ
-  ininResizeListener() {
-    window.addEventListener(`resize`, this.updateSize.bind(this));
-  }
-  updateSize() {
-    this.size = Math.min(window.innerWidth, window.innerHeight);
-
-    this.canvas.height = this.size;
-    this.canvas.width = this.size;
-  }
-
-
-  //СЧЕТЧИК ДЛЯ ОТРИСОВКИ КАРТИНОК
-  increaseLoadingCounter() {
-    this.loadingCounter++;
-
-    if (this.loadingCounter === 7) {
-      this.drawScene();
-    }
-  }
-
-  //ЖДЕМ ЗАГРУЗКУ КАРТИНКИ И УВЕЛИЧИВАЕМ СЧЕТЧИК
-  initEventListeners() {
-    this.airplaneImg.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.iceImg.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.seaCalfImg.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.snowFlake1Img.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.snowFlake2Img.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.tree1Img.onload = () => {
-      this.increaseLoadingCounter();
-    };
-
-    this.tree2Img.onload = () => {
-      this.increaseLoadingCounter();
-    };
-  }
-
-  //ПУТИ ДО КАРТИНОК
-  imagesSrc() {
-    this.airplaneImg.src = "./img/module-4/win-primary-images/airplane.png";
-    this.iceImg.src = "./img/module-4/win-primary-images/ice.png";
-    this.seaCalfImg.src = "./img/module-4/win-primary-images/sea-calf-2.png";
-    this.snowFlake1Img.src = "./img/module-4/win-primary-images/snowflake.png";
-    this.snowFlake2Img.src = "./img/module-4/win-primary-images/snowflake.png";
-    this.tree1Img.src = "./img/module-4/win-primary-images/tree.png";
-    this.tree2Img.src = "./img/module-4/win-primary-images/tree-2.png";
-  }
-
-
-  drawImage(object) {
-    let x = object.x;
-    let y = object.y;
-    let size = object.size;
-    let opacity = object.opacity;
-    let image = object.img;
-    let transforms = object.transforms;
-
-    let width = this.size * (size / 100);
-    let height = (this.size * (size / 100) * image.height) / image.width;
-
-    x = this.size * (x / 100) - width / 2;
-    y = this.size * (y / 100) - height / 2;
-
-    if (opacity === 0) {
-      return;
-    }
-
-    if (transforms && (transforms.scaleX === 0 || transforms.scaleY === 0)) {
-      return;
-    }
-
-    this.ctx.save();
-
-    if (transforms) {
-      if (transforms.translateX) {
-        x += this.size * (transforms.translateX / 100);
-      }
-
-      if (transforms.translateY) {
-        y += this.size * (transforms.translateY / 100);
-      }
-
-      if (transforms.rotate) {
-        this.ctx.translate(x + width / 2, y + height / 2);
-        this.ctx.rotate((transforms.rotate * Math.PI) / 180);
-      }
-
-      if (transforms.scaleX) {
-        width *= transforms.scaleX;
-
-        if (transforms.scaleX < 0) {
-          this.ctx.scale(-1, 1);
-
-          x = -x;
-        }
-      }
-
-      if (transforms.scaleY) {
-        height *= transforms.scaleY;
-
-        if (transforms.scaleY < 0) {
-          this.ctx.scale(1, -1);
-
-          y = -y;
-        }
-      }
-
-      if (transforms.rotate) {
-        this.ctx.translate(-x - width / 2, -y - height / 2);
-      }
-    }
-
-    if (opacity) {
-      this.ctx.globalAlpha = opacity;
-    }
-
-    this.ctx.drawImage(image, x, y, width, height);
-
-    this.ctx.restore();
+    this.initObjects();
   }
 
   drawBlob() {
-    const blob = this.blob;
+    const blob = local.blob;
     const angle = (blob.angle * Math.PI) / 180;
 
     if (blob.opacity === 0) {
@@ -297,27 +163,46 @@ export default class seacalfScene {
     this.ctx.restore();
   }
 
-  // ОТРИСОВКА КАРТИНОК
-  drawScene() {
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+  //АНИМАЦИЯ
+  initIceAndSeaCalfAnimations() {
+    this.animations.push(
+      new Animation({
+        func: (progress) => {
+          const progressReversed = 1 - progress;
 
-    this.drawBlob();
-    this.drawImage(this.plane);
-    this.drawImage(this.tree1);
-    this.drawImage(this.tree2);
-    this.drawImage(this.ice);
-    this.drawImage(this.seaCalf);
-    this.drawImage(this.snowFlake1);
-    this.drawImage(this.snowFlake2);
+          this.objectsScene.ice.transforms.translateY = 30 * progressReversed;
+          this.objectsScene.ice.transforms.rotate = -30 * Math.sin(progressReversed * 2);
+
+          this.objectsScene.seaCalf.transforms.translateY =
+            30 * progressReversed;
+          this.objectsScene.seaCalf.transforms.rotate = -30 * Math.sin(progressReversed * 2);
+        },
+        delay: 500,
+        duration: 2000,
+        easing: easing.easeOutElastic,
+      })
+    );
+
+    this.animations.push(
+      new Animation({
+        func: (progress) => {
+          this.objectsScene.seaCalf.opacity = progress;
+          this.objectsScene.ice.opacity = progress;
+        },
+        delay: 500,
+        duration: 300,
+        easing: easing.easeInQuad,
+      })
+    );
   }
 
-
-  //АНИМАЦИЯ
   initSnowFlakesAnimations() {
     this.animations.push(
       new Animation({
         func: (progress, details) => {
-          this.snowFlake1.transforms.translateY = 2 * Math.sin((1.5 * (details.currentTime - details.startTime)) / 1000);
+          this.objectsScene.snowFlake1.transforms.translateY =
+            2 *
+            Math.sin((1.5 * (details.currentTime - details.startTime)) / 1000);
         },
         duration: "infinite",
       })
@@ -326,7 +211,7 @@ export default class seacalfScene {
     this.animations.push(
       new Animation({
         func: (progress, details) => {
-          this.snowFlake2.transforms.translateY =
+          this.objectsScene.snowFlake2.transforms.translateY =
             2 *
             Math.sin((1.5 * (details.currentTime - details.startTime)) / 1000);
         },
@@ -338,7 +223,7 @@ export default class seacalfScene {
     this.animations.push(
       new Animation({
         func: (progress) => {
-          this.snowFlake1.opacity = progress;
+          this.objectsScene.snowFlake1.opacity = progress;
         },
         duration: 1000,
         delay: 800,
@@ -349,41 +234,10 @@ export default class seacalfScene {
     this.animations.push(
       new Animation({
         func: (progress) => {
-          this.snowFlake2.opacity = progress;
+          this.objectsScene.snowFlake2.opacity = progress;
         },
         duration: 1000,
         delay: 1200,
-        easing: easing.easeInQuad,
-      })
-    );
-  }
-
-  initIceAndSeaCalfAnimations() {
-    this.animations.push(
-      new Animation({
-        func: (progress) => {
-          const progressReversed = 1 - progress;
-
-          this.ice.transforms.translateY = 30 * progressReversed;
-          this.ice.transforms.rotate = -30 * Math.sin(progressReversed * 2);
-
-          this.seaCalf.transforms.translateY = 30 * progressReversed;
-          this.seaCalf.transforms.rotate = -30 * Math.sin(progressReversed * 2);
-        },
-        delay: 500,
-        duration: 2000,
-        easing: easing.easeOutElastic,
-      })
-    );
-
-    this.animations.push(
-      new Animation({
-        func: (progress) => {
-          this.seaCalf.opacity = progress;
-          this.ice.opacity = progress;
-        },
-        delay: 500,
-        duration: 300,
         easing: easing.easeInQuad,
       })
     );
@@ -395,15 +249,41 @@ export default class seacalfScene {
         func: (progress) => {
           const progressReversed = 1 - progress;
 
-          this.plane.transforms.translateX = -40 * progressReversed;
-          this.plane.transforms.translateY =
+          this.objectsScene.plane.transforms.translateX = -40 * progressReversed;
+          this.objectsScene.plane.transforms.translateY =
             5 * Math.sin(Math.PI * progressReversed) - 15 * progressReversed;
-          this.plane.transforms.rotate =
+          this.objectsScene.plane.transforms.rotate =
             45 * Math.sin(Math.PI * progressReversed) + 45 * progressReversed;
-          this.plane.opacity = progress;
+          this.objectsScene.plane.opacity = progress;
         },
         duration: 500,
         delay: 1100,
+        easing: easing.easeInQuad,
+      })
+    );
+  }
+
+  initTreesAnimations() {
+    this.animations.push(
+      new Animation({
+        func: (progress) => {
+          this.objectsScene.tree1.transforms.translateY = 30 * (1 - progress);
+          this.objectsScene.tree1.opacity = progress;
+        },
+        duration: 500,
+        delay: 1400,
+        easing: easing.easeInQuad,
+      })
+    );
+
+    this.animations.push(
+      new Animation({
+        func: (progress) => {
+          this.objectsScene.tree2.transforms.translateY = 30 * (1 - progress);
+          this.objectsScene.tree2.opacity = progress;
+        },
+        duration: 500,
+        delay: 1200,
         easing: easing.easeInQuad,
       })
     );
@@ -415,13 +295,13 @@ export default class seacalfScene {
         func: (progress) => {
           const progressReversed = 1 - progress;
 
-          this.blob.radius = 15 * progress;
-          this.blob.centerY = 55 - 15 * progressReversed;
-          this.blob.endX = 91 - 35 * progressReversed;
-          this.blob.endY = 49 - 12 * progressReversed;
-          this.blob.angle = 30 + 120 * progressReversed;
-          this.blob.deltasLength = 10 * progress;
-          this.blob.opacity = progress;
+          local.blob.radius = 15 * progress;
+          local.blob.centerY = 55 - 15 * progressReversed;
+          local.blob.endX = 91 - 35 * progressReversed;
+          local.blob.endY = 49 - 12 * progressReversed;
+          local.blob.angle = 30 + 120 * progressReversed;
+          local.blob.deltasLength = 10 * progress;
+          local.blob.opacity = progress;
         },
         duration: 500,
         delay: 1200,
@@ -430,33 +310,6 @@ export default class seacalfScene {
     );
   }
 
-  initTreesAnimations() {
-    this.animations.push(
-      new Animation({
-        func: (progress) => {
-          this.tree1.transforms.translateY = 30 * (1 - progress);
-          this.tree1.opacity = progress;
-        },
-        duration: 500,
-        delay: 1400,
-        easing: easing.easeInQuad,
-      })
-    );
-
-    this.animations.push(
-      new Animation({
-        func: (progress) => {
-          this.tree2.transforms.translateY = 30 * (1 - progress);
-          this.tree2.opacity = progress;
-        },
-        duration: 500,
-        delay: 1200,
-        easing: easing.easeInQuad,
-      })
-    );
-  }
-
-  // СТАРТ АНИМАЦИИ
   startAnimation() {
     this.animations.push(
       new Animation({
