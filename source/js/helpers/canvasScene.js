@@ -18,9 +18,8 @@ export default class canvasScene {
 
     this.initObjects();
     this.initEventListeners();
-    
-    this.updateSize();
-    this.ininResizeListener();
+
+    window.addEventListener("resize", () => this.drawFullScreen());
   }
 
   initObjects() {
@@ -48,7 +47,7 @@ export default class canvasScene {
     }
   }
 
-   //СЧЕТЧИК ДЛЯ ОТРИСОВКИ КАРТИНОК
+  //СЧЕТЧИК ДЛЯ ОТРИСОВКИ КАРТИНОК
   increaseLoadingCounter() {
     this.loadingCounter++;
 
@@ -158,16 +157,44 @@ export default class canvasScene {
       }
     }
 
+    this.drawFullScreen();
+
   }
 
   //АДАПТИВ
-  ininResizeListener() {
-    window.addEventListener(`resize`, this.updateSize.bind(this));
-  }
-  updateSize() {
-    this.size = Math.min(window.innerWidth, window.innerHeight);
+  drawFullScreen() {
+    let ww = window.innerWidth,
+      wh = window.innerHeight;
 
-    this.canvas.height = this.size;
-    this.canvas.width = this.size;
+    this.setScaleCanvas(Math.max(ww, wh));
+    this.setCanvasToCenter(ww, wh);
+  }
+
+  setCanvasSize(width, height) {
+    const canvas = this.canvas;
+
+    canvas.width = width;
+    canvas.height = height;
+    canvas.style.width = width + "px";
+    canvas.style.height = height + "px";
+  }
+
+  setScaleCanvas(size) {
+    const canvas = this.canvas;
+
+    canvas.style.transform = `scale(
+          ${(size / canvas.width) * 0.6},
+          ${(size / canvas.height) * 0.6}
+        )`;
+  }
+
+  setCanvasToCenter(width, height) {
+    const canvas = this.canvas;
+
+    const left = (width - canvas.offsetWidth) * 0.5;
+    const top = (height - canvas.offsetHeight) * 0.55;
+
+    canvas.style.left = `${left}px`;
+    canvas.style.top = `${top}px`;
   }
 }
