@@ -1,4 +1,5 @@
 import seacalfScene from './seacalfCanvas.js';
+import crocodileScene from './crocodileCanvas.js';
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -27,9 +28,9 @@ export default () => {
           }
 
           let seacalfCanvasAnimate = new seacalfScene({
-              canvas: document.querySelector("#seacalf-canvas")
-            });
-            
+            canvas: document.querySelector("#seacalf-canvas")
+          });
+
           seacalfCanvasAnimate.startAnimation();
 
         } else if (target == 'result2') {
@@ -54,6 +55,12 @@ export default () => {
           }
 
           animTimeOut();
+
+          let crocodileCanvasAnimate = new crocodileScene({
+            canvas: document.querySelector("#crocodile-canvas")
+          });
+
+          crocodileCanvasAnimate.startAnimation();
         }
       });
     }
