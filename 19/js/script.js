@@ -62209,7 +62209,7 @@ class Intro {
     this.height = window.innerHeight;
     this.aspectRation = this.width / this.height;
 
-    this.texture = './img/module-5/scenes-textures/scene-0.png';
+    this.texture = {src: './img/module-5/scenes-textures/scene-0.png', options: {hue: 0.0}};
     this.textureWidth = 2048;
     this.textureHeight = 1024;
     this.textureRatio = this.textureWidth / this.textureHeight;
@@ -62241,11 +62241,11 @@ class Intro {
 
     const loadManager = new three__WEBPACK_IMPORTED_MODULE_0__["LoadingManager"]();
     const textureLoader = new three__WEBPACK_IMPORTED_MODULE_0__["TextureLoader"](loadManager);
-    const loadedTexture = textureLoader.load(this.texture);
+    const loadedTexture = textureLoader.load(this.texture.src);
 
     loadManager.onLoad = () => {
       const geometry = new three__WEBPACK_IMPORTED_MODULE_0__["PlaneGeometry"](1, 1);
-      const material = new three__WEBPACK_IMPORTED_MODULE_0__["RawShaderMaterial"](Object(_helpers_helperRawShaderMaterial__WEBPACK_IMPORTED_MODULE_1__["default"])(loadedTexture));
+      const material = new three__WEBPACK_IMPORTED_MODULE_0__["RawShaderMaterial"](Object(_helpers_helperRawShaderMaterial__WEBPACK_IMPORTED_MODULE_1__["default"])(loadedTexture, this.texture.options));
       const image = new three__WEBPACK_IMPORTED_MODULE_0__["Mesh"](geometry, material);
 
       image.scale.x = this.textureWidth;
