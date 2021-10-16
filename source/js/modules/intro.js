@@ -43,7 +43,10 @@ export default class Intro {
 
     loadManager.onLoad = () => {
       const geometry = new THREE.PlaneGeometry(1, 1);
-      const material = new THREE.RawShaderMaterial(helperRawShaderMaterial(loadedTexture, this.texture.options));
+      const material = new THREE.RawShaderMaterial(helperRawShaderMaterial({
+        map: {value: loadedTexture},
+        options: {value: this.texture.options}
+      }));
       const image = new THREE.Mesh(geometry, material);
 
       image.scale.x = this.textureWidth;
