@@ -1,9 +1,8 @@
 import Swiper from "swiper";
-import Story from './story';
+import {Story} from './story';
 
 export default () => {
   let storySlider;
-  let sliderContainer = document.getElementById(`story`);
   let bodyDOM = document.querySelector('body');
   const story = new Story();
 
