@@ -55,8 +55,7 @@ export class Story {
     this.bubbleGlareEndRadianAngle = 2.8;
     this.bubblesDuration = 4000;
 
-    this.bubbles = [
-      {
+    this.bubbles = [{
         radius: 80,
         initialPosition: [this.center.x - 100, this.center.y - this.height * 1.8],
         position: [this.center.x - 100, this.center.y - this.height * 1.8],
@@ -123,14 +122,18 @@ export class Story {
 
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 1200);
-    this.camera.position.z = 1200;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1200);
+    this.camera.position.z = 750;
 
     this.color = new THREE.Color(0x5f458c);
     this.alpha = 1;
 
     this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas
+      canvas: this.canvas,
+      alpha: true,
+      antialias: false,
+      logarithmicDepthBuffer: false,
+      powerPreference: 'high-performance'
     });
     this.renderer.setClearColor(this.color, this.alpha);
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -163,6 +166,14 @@ export class Story {
         image.position.x = this.textureWidth * i;
 
         this.scene.add(image);
+
+        const sphere = this.getSphere();
+        this.scene.add(sphere);
+
+        const lights = this.getLight();
+        lights.position.z = this.camera.position.z;
+        this.scene.add(lights);
+
       });
       this.render();
     };
@@ -263,6 +274,44 @@ export class Story {
     } else {
       animHueKey = false;
     }
+  }
+
+  getLight() {
+    const light = new THREE.Group();
+
+    //DirectionalLight
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color('rgb(255,255,255)'), 0.84);
+    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    light.add(lightUnit);
+
+    //light 1
+    lightUnit = new THREE.PointLight(new THREE.Color('rgb(246,242,255)'), 0.60, 975, 2);
+    lightUnit.position.set(-785, -350, 710);
+    light.add(lightUnit);
+
+    //light 2
+    lightUnit = new THREE.PointLight(new THREE.Color('rgb(245,254,255)'), 0.95, 975, 2);
+    lightUnit.position.set(730, -800, 985);
+    light.add(lightUnit);
+
+    return light;
+  }
+
+  getSphere() {
+    const geometry = new THREE.SphereGeometry(100, 50, 50);
+
+    const material = new THREE.MeshStandardMaterial({
+      color: 0xB827B0,
+      metalness: 0.05,
+      emissive: 0x0,
+      roughness: 0.5
+    });
+
+    return new THREE.Mesh(geometry, material);
+  }
+
+  appendRendererToDOMElement(renderer, targetNode) {
+    targetNode.appendChild(renderer.domElement);
   }
 
 }
