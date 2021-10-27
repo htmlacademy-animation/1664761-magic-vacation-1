@@ -3,7 +3,17 @@ import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
 import {
   animateFPS
 } from '../helpers/animate.js';
+import StoryScene2 from './storyScene/StoryScene2.js';
+import StoryScene3 from './storyScene/StoryScene3.js';
 
+
+export const setMaterial = (color) => {
+  return new THREE.MeshStandardMaterial({
+    color: color,
+  });
+};
+
+export const degToRadians = (deg) => (deg * Math.PI) / 180;
 
 export class Story {
   constructor() {
@@ -19,7 +29,7 @@ export class Story {
         src: './img/module-5/scenes-textures/scene-1.png',
         options: {
           hue: 0.0
-        }
+        },
       },
       {
         src: `./img/module-5/scenes-textures/scene-2.png`,
@@ -33,14 +43,16 @@ export class Story {
               duration: 2000,
               variation: 0.4,
             },
-          }
-        }
+          },
+        },
+        scene: new StoryScene2()
       },
       {
         src: './img/module-5/scenes-textures/scene-3.png',
         options: {
           hue: 0.0
-        }
+        },
+        scene: new StoryScene3()
       },
       {
         src: './img/module-5/scenes-textures/scene-4.png',
@@ -143,10 +155,10 @@ export class Story {
     const textureLoader = new THREE.TextureLoader(loadManager);
     const loadedTextures = this.textures.map((texture) => ({
       src: textureLoader.load(texture.src),
-      options: texture.options
+      options: texture.options,
+      scene: texture.scene
     }));
     const geometry = new THREE.PlaneGeometry(1, 1);
-
 
 
     loadManager.onLoad = () => {
@@ -165,14 +177,16 @@ export class Story {
         image.scale.y = this.textureHeight;
         image.position.x = this.textureWidth * i;
 
-        this.scene.add(image);
-
-        const sphere = this.getSphere();
-        this.scene.add(sphere);
-
         const lights = this.getLight();
         lights.position.z = this.camera.position.z;
         this.scene.add(lights);
+
+        if (texture.scene) {
+          texture.scene.position.x = this.textureWidth * i;
+          this.scene.add(texture.scene);
+        }
+
+        this.scene.add(image);
 
       });
       this.render();
@@ -271,6 +285,7 @@ export class Story {
         this.animateBubbles(1);
         this.animateBubbles(2);
       }
+
     } else {
       animHueKey = false;
     }
@@ -279,35 +294,19 @@ export class Story {
   getLight() {
     const light = new THREE.Group();
 
-    //DirectionalLight
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color('rgb(255,255,255)'), 0.84);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.3);
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
-    //light 1
-    lightUnit = new THREE.PointLight(new THREE.Color('rgb(246,242,255)'), 0.60, 975, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
     lightUnit.position.set(-785, -350, 710);
     light.add(lightUnit);
 
-    //light 2
-    lightUnit = new THREE.PointLight(new THREE.Color('rgb(245,254,255)'), 0.95, 975, 2);
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.5, 3000, 0.5);
     lightUnit.position.set(730, -800, 985);
     light.add(lightUnit);
 
     return light;
-  }
-
-  getSphere() {
-    const geometry = new THREE.SphereGeometry(100, 50, 50);
-
-    const material = new THREE.MeshStandardMaterial({
-      color: 0xB827B0,
-      metalness: 0.05,
-      emissive: 0x0,
-      roughness: 0.5
-    });
-
-    return new THREE.Mesh(geometry, material);
   }
 
   appendRendererToDOMElement(renderer, targetNode) {
