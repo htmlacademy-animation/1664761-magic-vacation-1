@@ -3,8 +3,8 @@ import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
 import {
   animateFPS
 } from '../helpers/animate.js';
-import StoryScene2 from './storyScene/StoryScene2.js';
-import StoryScene3 from './storyScene/StoryScene3.js';
+import StoryScene2 from './StoryScene/StoryScene2.js';
+import StoryScene3 from './StoryScene/StoryScene3.js';
 
 
 export const setMaterial = (color) => {
