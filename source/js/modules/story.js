@@ -3,6 +3,7 @@ import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
 import {
   animateFPS
 } from '../helpers/animate.js';
+import StoryScene1 from './StoryScene/StoryScene1.js';
 import StoryScene2 from './StoryScene/StoryScene2.js';
 import StoryScene3 from './StoryScene/StoryScene3.js';
 
@@ -30,6 +31,7 @@ export class Story {
         options: {
           hue: 0.0
         },
+        scene: new StoryScene1()
       },
       {
         src: `./img/module-5/scenes-textures/scene-2.png`,
