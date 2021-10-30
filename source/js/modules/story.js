@@ -8,9 +8,12 @@ import StoryScene2 from './StoryScene/StoryScene2.js';
 import StoryScene3 from './StoryScene/StoryScene3.js';
 
 
-export const setMaterial = (color) => {
+export const setMaterial = (options = {}) => {
+  const {color, ...other} = options;
+
   return new THREE.MeshStandardMaterial({
-    color: color,
+    color: new THREE.Color(color),
+    ...other
   });
 };
 
@@ -136,8 +139,8 @@ export class Story {
 
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1200);
-    this.camera.position.z = 750;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1500);
+    this.camera.position.z = 1500;
 
     this.color = new THREE.Color(0x5f458c);
     this.alpha = 1;
@@ -181,13 +184,14 @@ export class Story {
 
         const lights = this.getLight();
         lights.position.z = this.camera.position.z;
-        this.scene.add(lights);
-
+        
         if (texture.scene) {
           texture.scene.position.x = this.textureWidth * i;
           this.scene.add(texture.scene);
+          lights.position.x = this.textureWidth * i;
         }
-
+        
+        this.scene.add(lights);
         this.scene.add(image);
 
       });

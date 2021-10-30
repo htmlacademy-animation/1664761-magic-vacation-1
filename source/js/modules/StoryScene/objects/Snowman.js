@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {
   setMaterial,
   degToRadians
-} from '../story.js';
+} from '../../story.js';
 
 
 class Snowman extends THREE.Group {
@@ -19,20 +19,26 @@ class Snowman extends THREE.Group {
   }
 
   getHead() {
-    const snowmanHead = new THREE.Mesh(new THREE.SphereGeometry(44, 30, 30), setMaterial(0xb2d0f4));
+    const snowmanHead = new THREE.Mesh(new THREE.SphereGeometry(44, 30, 30), setMaterial({
+      color: 0xb2d0f4
+    }));
     this.add(snowmanHead);
   }
 
   getBody() {
-    const snowmanBody = new THREE.Mesh(new THREE.SphereGeometry(75, 30, 30), setMaterial(0xb2d0f4));
+    const snowmanBody = new THREE.Mesh(new THREE.SphereGeometry(75, 30, 30), setMaterial({
+      color: 0xb2d0f4
+    }));
     snowmanBody.position.set(0, -105, 0);
     this.add(snowmanBody);
   }
 
   getCarrot() {
-    const snowmanCarrot = new THREE.Mesh(new THREE.ConeGeometry(18, 75, 30), setMaterial(0xff4500));
+    const snowmanCarrot = new THREE.Mesh(new THREE.ConeGeometry(18, 75, 30), setMaterial({
+      color: 0xff4500
+    }));
     snowmanCarrot.position.set(50, 0, 0);
-    snowmanCarrot.rotation.copy(new THREE.Euler(0, 0, degToRadians(-90), 'XYZ' ));
+    snowmanCarrot.rotation.copy(new THREE.Euler(0, 0, degToRadians(-90), 'XYZ'));
     this.add(snowmanCarrot);
   }
 }
