@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
-import SVGObject from './StoryScene/svgObject';
+import SVGObject from './StoryScene/utils/svgObject';
 import {
   degToRadians
 } from './story.js';
