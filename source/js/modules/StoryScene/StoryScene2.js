@@ -5,6 +5,7 @@ import {
 } from '../story.js';
 import Lamp from './objects/Lamp.js';
 import SVGObject from './utils/svgObject.js';
+import { colors, reflectivity } from '../../helpers/colorsAndReflection.js';
 
 
 class StoryScene2 extends THREE.Group {
@@ -22,7 +23,7 @@ class StoryScene2 extends THREE.Group {
   }
 
   getPyramid() {
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(250, 280, 4), setMaterial({color: 0x0062c3, flatShading: true}));
+    const mesh = new THREE.Mesh(new THREE.ConeGeometry(250, 280, 4), setMaterial({color: colors.Blue, flatShading: true, ...reflectivity.soft}));
 
     mesh.scale.set(0.45, 0.6, 0.45);
     mesh.rotation.copy(new THREE.Euler(degToRadians(10), 0, 0, 'XZY'));

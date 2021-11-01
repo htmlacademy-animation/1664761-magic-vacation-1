@@ -1,9 +1,12 @@
+import { colors, reflectivity } from '../../../helpers/colorsAndReflection.js';
+
 const svgForms = [{
     name: `flamingo`,
     src: `./img/module-6/svg-forms/flamingo.svg`,
     depth: 8,
     cap: 2,
-    color: `#c75863`,
+    color: colors.LightDominantRed,
+    reflectivity: reflectivity.soft
   },
 
   {
@@ -11,7 +14,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/snowflake.svg`,
     depth: 8,
     cap: 2,
-    color: `#224fa7`,
+    color: colors.Blue,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -19,7 +23,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/question.svg`,
     depth: 8,
     cap: 2,
-    color: `#224fa7`,
+    color: colors.Blue,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -27,7 +32,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/leaf.svg`,
     depth: 8,
     cap: 2,
-    color: `#07925d`,
+    color: colors.Green,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -35,7 +41,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/leaf.svg`,
     depth: 3,
     cap: 3,
-    color: `#07925d`,
+    color: colors.Green,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -43,7 +50,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/leaf.svg`,
     depth: 3,
     cap: 3,
-    color: `#07925d`,
+    color: colors.Green,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -51,7 +59,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/leaf.svg`,
     depth: 3,
     cap: 3,
-    color: `#07925d`,
+    color: colors.Green,
+    reflectivity: reflectivity.basic
   },
 
   {
@@ -59,7 +68,8 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/keyhole.svg`,
     depth: 20,
     cap: 2,
-    color: `#4e4069`,
+    color: colors.DarkPurple,
+    reflectivity: reflectivity.soft
   },
 
   {
