@@ -1,4 +1,7 @@
-import { colors, reflectivity } from '../../../helpers/colorsAndReflection.js';
+import {
+  colors,
+  reflectivity
+} from '../../../helpers/colorsAndReflection.js';
 
 const svgForms = [{
     name: `flamingo`,
@@ -77,9 +80,17 @@ const svgForms = [{
     src: `./img/module-6/svg-forms/flower.svg`,
     depth: 4,
     cap: 2,
-    color: `#6649a3`,
+    color: colors.AdditionalPurple,
   },
-  
+
+  {
+    name: `flower-scene-4`,
+    src: `./img/module-6/svg-forms/flower.svg`,
+    depth: 4,
+    cap: 2,
+    color: colors.ShadowedAdditionalPurple,
+  },
+
 ];
 
 export default svgForms;
