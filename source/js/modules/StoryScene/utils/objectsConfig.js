@@ -6,19 +6,19 @@ import {
 const objectsConfig = [{
     name: `airplane`,
     type: `obj`,
-    path: `../../../../img/3d/module-6/scene-0-objects/airplane.obj`,
+    path: `3d/module-6/scene-0-objects/airplane.obj`,
     color: colors.White,
     reflectivity: reflectivity.soft
   },
   {
     name: `suitcase`,
     type: `gltf`,
-    path: `../../../../img/3d/module-6/scene-0-objects/suitcase.gltf`,
+    path: `3d/module-6/scene-0-objects/suitcase.gltf`,
   },
   {
     name: `watermelon`,
     type: `gltf`,
-    path: `../../../../img/3d/module-6/scene-0-objects/watermelon.gltf`,
+    path: `3d/module-6/scene-0-objects/watermelon.gltf`,
   },
 ];
 
