@@ -4,6 +4,10 @@ import SVGObject from './StoryScene/utils/svgObject';
 import {
   degToRadians
 } from './story.js';
+import {
+  colors,
+  reflectivity
+} from '../helpers/colorsAndReflection.js';
 
 export default class Intro {
   constructor() {
@@ -24,6 +28,18 @@ export default class Intro {
     this.canvasId = 'canvas-intro';
 
     this.render = this.render.bind(this);
+  }
+
+  setMaterial(options = {}) {
+    const {
+      color,
+      ...other
+    } = options;
+
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      ...other
+    });
   }
 
   init() {
@@ -76,6 +92,10 @@ export default class Intro {
       image.scale.x = this.textureWidth;
       image.scale.y = this.textureHeight;
 
+      const lights = this.getLight();
+      lights.position.z = this.camera.position.z;
+      this.scene.add(lights);
+
       this.scene.add(image);
       this.render();
     };
@@ -87,12 +107,31 @@ export default class Intro {
     this.renderer.render(this.scene, this.camera);
   }
 
+  getLight() {
+    const light = new THREE.Group();
+
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.3);
+    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    light.add(lightUnit);
+
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
+    lightUnit.position.set(-785, -350, 710);
+    light.add(lightUnit);
+
+    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.5, 3000, 0.5);
+    lightUnit.position.set(730, -800, 985);
+    light.add(lightUnit);
+
+    return light;
+  }
+
   constructChildren() {
     this.getKeyhole();
     this.getFlamingo();
     this.getLeaf();
     this.getSnowflake();
     this.getQuestion();
+    this.getDummy();
   }
 
   async getKeyhole() {
@@ -102,6 +141,17 @@ export default class Intro {
     keyhole.scale.set(1.5, -1.5, 1.5);
 
     this.scene.add(keyhole);
+  }
+
+  getDummy() {
+    const dummy = new THREE.PlaneGeometry(1000, 1000);
+    const dummyMesh = new THREE.Mesh(dummy, this.setMaterial({
+      color: colors.Purple,
+      ...reflectivity.basic
+    }));
+
+    dummyMesh.position.set(0, 0, 10);
+    this.scene.add(dummyMesh);
   }
 
   async getFlamingo() {

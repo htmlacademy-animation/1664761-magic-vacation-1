@@ -5,10 +5,20 @@ import {
 import {
   getLathePoints
 } from '../utils/LatheOptions.js';
+import {
+  colors,
+  reflectivity
+} from '../../../helpers/colorsAndReflection.js';
 
 class Saturn extends THREE.Group {
-  constructor() {
+  constructor(isDark) {
     super();
+
+    this.isDark = isDark;
+
+    this.color1 = this.isDark ? colors.ShadowedDominantRed : colors.DominantRed;
+    this.color2 = this.isDark ? colors.ShadowedBrightPurple : colors.BrightPurple;
+    this.color3 = colors.MetalGrey;
 
     this.sphereBigMesh;
     this.ringMesh;
@@ -29,8 +39,8 @@ class Saturn extends THREE.Group {
   getSphereBig() {
     const sphere = new THREE.SphereGeometry(60, 50, 50);
     this.sphereBigMesh = new THREE.Mesh(sphere, setMaterial({
-      color: 0xfc2947,
-      flatShading: true
+      color: this.color1,
+      ...reflectivity.soft
     }));
 
     this.add(this.sphereBigMesh);
@@ -41,8 +51,8 @@ class Saturn extends THREE.Group {
 
     const ring = new THREE.LatheBufferGeometry(points, 50);
     this.ringMesh = new THREE.Mesh(ring, setMaterial({
-      color: 0x5b3ea5,
-      flatShading: true
+      color: this.color2,
+      ...reflectivity.soft
     }));
     this.ringMesh.rotation.copy(new THREE.Euler(20 * THREE.Math.DEG2RAD, 0, 18 * THREE.Math.DEG2RAD), `XYZ`);
 
@@ -52,8 +62,8 @@ class Saturn extends THREE.Group {
   getCylinder() {
     const cylinder = new THREE.CylinderBufferGeometry(1, 1, 1000, 10);
     this.cylinderMesh = new THREE.Mesh(cylinder, setMaterial({
-      color: 0x8388ab,
-      flatShading: true
+      color: this.color3,
+      ...reflectivity.soft
     }));
 
     const topOffset = this.sphereBigMesh.position.y + cylinder.parameters.height / 2;
@@ -64,8 +74,8 @@ class Saturn extends THREE.Group {
   getSphereSmall() {
     const sphere = new THREE.SphereGeometry(10, 30, 30);
     this.sphereSmallMesh = new THREE.Mesh(sphere, setMaterial({
-      color: 0x5b3ea5,
-      flatShading: true
+      color: this.color2,
+      ...reflectivity.soft
     }));
 
     const topOffset = this.sphereBigMesh.position.y + this.sphereBigMesh.geometry.parameters.radius * 2;

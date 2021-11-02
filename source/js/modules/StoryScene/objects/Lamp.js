@@ -3,6 +3,7 @@ import {
   setMaterial,
   degToRadians
 } from '../../story.js';
+import { colors, reflectivity } from '../../../helpers/colorsAndReflection.js';
 
 
 class Lamp extends THREE.Group {
@@ -23,8 +24,9 @@ class Lamp extends THREE.Group {
 
   getLampUpper() {
     const lampUpper = new THREE.Mesh(new THREE.CylinderGeometry(45, 57, 6, 4), setMaterial({
-      color: 0x0062c3,
-      flatShading: true
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
     lampUpper.position.set(0, 178, 0);
     this.add(lampUpper);
@@ -32,8 +34,9 @@ class Lamp extends THREE.Group {
 
   getLampMid() {
     const lampMid = new THREE.Mesh(new THREE.CylinderGeometry(42, 34, 60, 4), setMaterial({
-      color: 0x9db4ee,
-      flatShading: true
+      color: colors.LightBlue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
     lampMid.position.set(0, 145, 0);
     this.add(lampMid);
@@ -41,8 +44,9 @@ class Lamp extends THREE.Group {
 
   getLampBot() {
     const lampBot = new THREE.Mesh(new THREE.CylinderGeometry(37, 37, 4, 4), setMaterial({
-      color: 0x0062c3,
-      flatShading: true
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
     lampBot.position.set(0, 115, 0);
     this.add(lampBot);
@@ -50,8 +54,9 @@ class Lamp extends THREE.Group {
 
   getPole() {
     const pole = new THREE.Mesh(new THREE.CylinderGeometry(7, 7, 230, 4), setMaterial({
-      color: 0x0062c3,
-      flatShading: true
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
 
     this.add(pole);
@@ -59,8 +64,9 @@ class Lamp extends THREE.Group {
 
   getLampBaseSphere() {
     const lampBaseSphere = new THREE.Mesh(new THREE.SphereGeometry(16, 30, 30, 0, Math.PI * 2.00, Math.PI * 0.50, Math.PI * 1.00), setMaterial({
-      color: 0x0062c3,
-      flatShading: true
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
     lampBaseSphere.position.set(0, -128, 0);
     lampBaseSphere.rotation.copy(new THREE.Euler(degToRadians(180), 0, 0, 'XYZ'));
@@ -69,8 +75,9 @@ class Lamp extends THREE.Group {
 
   getLampBaseCylinder() {
     const lampBaseCylinder = new THREE.Mesh(new THREE.CylinderGeometry(16, 16, 120, 4), setMaterial({
-      color: 0x0062c3,
-      flatShading: true
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
     }));
     lampBaseCylinder.position.set(0, -188, 0);
     this.add(lampBaseCylinder);

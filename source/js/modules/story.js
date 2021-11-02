@@ -6,6 +6,7 @@ import {
 import StoryScene1 from './StoryScene/StoryScene1.js';
 import StoryScene2 from './StoryScene/StoryScene2.js';
 import StoryScene3 from './StoryScene/StoryScene3.js';
+import StoryScene4 from './StoryScene/StoryScene4.js';
 
 
 export const setMaterial = (options = {}) => {
@@ -63,7 +64,8 @@ export class Story {
         src: './img/module-5/scenes-textures/scene-4.png',
         options: {
           hue: 0.0
-        }
+        },
+        scene: new StoryScene4()
       },
     ];
 

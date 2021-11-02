@@ -21,7 +21,6 @@ class Road extends THREE.Group {
 
   constructChildren() {
     this.addBase();
-    this.addStrips();
   }
 
   addBase() {
@@ -38,25 +37,6 @@ class Road extends THREE.Group {
     }));
 
     this.add(mesh);
-  }
-
-  addStrips() {
-    for (let index = 1; index < 12; index += 3) {
-      const points = getLathePoints(20, 3, 800);
-      const {
-        start,
-        length
-      } = getLatheDegrees(this.startDeg + this.lengthStrip * index, this.startDeg + this.lengthStrip * (index + 1));
-
-      const sprip = new THREE.LatheBufferGeometry(points, 5, start, length);
-      const mesh = new THREE.Mesh(sprip, setMaterial({
-        color: 0xe2e7ee,
-        flatShading: true
-      }));
-      mesh.position.set(0, 1, 0);
-
-      this.add(mesh);
-    }
   }
 }
 
