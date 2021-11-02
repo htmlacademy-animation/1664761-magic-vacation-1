@@ -6,6 +6,10 @@ import {
   getLathePoints,
   getLatheDegrees
 } from '../utils/LatheOptions.js';
+import roadShaderMaterial from '../materials/roadShaderMaterial.js';
+import {
+  colors
+} from '../../../helpers/colorsAndReflection.js';
 
 class Road extends THREE.Group {
   constructor() {
@@ -13,6 +17,8 @@ class Road extends THREE.Group {
 
     this.startDeg = 0;
     this.finishDeg = 90;
+
+    this.roadMesh;
 
     this.lengthStrip = (this.finishDeg - this.startDeg) / 12;
 
@@ -31,12 +37,18 @@ class Road extends THREE.Group {
     } = getLatheDegrees(this.startDeg, this.finishDeg);
 
     const base = new THREE.LatheBufferGeometry(points, 50, start, length);
-    const mesh = new THREE.Mesh(base, setMaterial({
-      color: 0x676f7f,
-      flatShading: true
+    const material = new THREE.ShaderMaterial(roadShaderMaterial({
+      baseColor: {
+        value: new THREE.Color(colors.Grey)
+      },
+      stripeColor: {
+        value: new THREE.Color(colors.White)
+      }
     }));
 
-    this.add(mesh);
+    this.roadMesh = new THREE.Mesh(base, material);
+
+    this.add(this.roadMesh);
   }
 }
 
