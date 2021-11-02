@@ -68607,19 +68607,19 @@ __webpack_require__.r(__webpack_exports__);
 const objectsConfig = [{
     name: `airplane`,
     type: `obj`,
-    path: `../../../../3d/module-6/scene-0-objects/airplane.obj`,
+    path: `../../../../img/3d/module-6/scene-0-objects/airplane.obj`,
     color: _helpers_colorsAndReflection_js__WEBPACK_IMPORTED_MODULE_0__["colors"].White,
     reflectivity: _helpers_colorsAndReflection_js__WEBPACK_IMPORTED_MODULE_0__["reflectivity"].soft
   },
   {
     name: `suitcase`,
     type: `gltf`,
-    path: `../../../../3d/module-6/scene-0-objects/suitcase.gltf`,
+    path: `../../../../img/3d/module-6/scene-0-objects/suitcase.gltf`,
   },
   {
     name: `watermelon`,
     type: `gltf`,
-    path: `../../../../3d/module-6/scene-0-objects/watermelon.gltf`,
+    path: `../../../../img/3d/module-6/scene-0-objects/watermelon.gltf`,
   },
 ];
 
