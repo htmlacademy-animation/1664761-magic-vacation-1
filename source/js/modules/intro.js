@@ -8,6 +8,11 @@ import {
   colors,
   reflectivity
 } from '../helpers/colorsAndReflection.js';
+import ModelObject from './StoryScene/utils/modelObject.js';
+import {
+  loadModel
+} from './StoryScene/utils/loadModel.js';
+
 
 export default class Intro {
   constructor() {
@@ -28,6 +33,8 @@ export default class Intro {
     this.canvasId = 'canvas-intro';
 
     this.render = this.render.bind(this);
+
+    this.isAnim = false;
   }
 
   setMaterial(options = {}) {
@@ -48,6 +55,7 @@ export default class Intro {
       this.initialized = true;
     }
 
+    this.isAnim = true;
     this.animationRequest = requestAnimationFrame(this.render);
   }
 
@@ -105,6 +113,16 @@ export default class Intro {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+
+    if (this.isAnim) {
+      requestAnimationFrame(this.render);
+    } else {
+      cancelAnimationFrame(this.render);
+    }
+  }
+
+  stopAnim() {
+    this.isAnim = false;
   }
 
   getLight() {
@@ -131,7 +149,48 @@ export default class Intro {
     this.getLeaf();
     this.getSnowflake();
     this.getQuestion();
+    this.getAirplane();
+    this.getSuitcase();
+    this.getWatermelon();
     this.getDummy();
+  }
+
+  getAirplane() {
+    const model = new ModelObject('airplane').getObject();
+
+    loadModel(model, this.setMaterial({
+      color: model.color,
+      ...model.reflectivity
+    }), (mesh) => {
+      mesh.name = model.name;
+      mesh.position.set(150, 80, 100);
+      mesh.rotation.copy(new THREE.Euler(degToRadians(80), degToRadians(120), degToRadians(-30)), `XYZ`);
+      this.scene.add(mesh);
+    });
+  }
+
+  getSuitcase() {
+    const model = new ModelObject('suitcase').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      mesh.position.set(-80, -180, 40);
+      mesh.rotation.copy(new THREE.Euler(degToRadians(30), degToRadians(-135), degToRadians(15)), `XYZ`);
+      mesh.scale.set(0.6, 0.6, 0.6);
+      this.scene.add(mesh);
+    });
+  }
+
+  getWatermelon() {
+    const model = new ModelObject('watermelon').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      mesh.position.set(-500, -280, 40);
+      mesh.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(0), degToRadians(130)), `XYZ`);
+      mesh.scale.set(1.5, 1.5, 1.5);
+      this.scene.add(mesh);
+    });
   }
 
   async getKeyhole() {
@@ -161,7 +220,6 @@ export default class Intro {
     flamingo.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
     flamingo.scale.set(-2, -2, 2);
 
-
     this.scene.add(flamingo);
   }
 
@@ -171,7 +229,6 @@ export default class Intro {
     leaf.position.set(560, 230, 50);
     leaf.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
     leaf.scale.set(1, -1, 1);
-
 
     this.scene.add(leaf);
   }
@@ -183,7 +240,6 @@ export default class Intro {
     snowflake.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
     snowflake.scale.set(1.3, 1.3, 1.3);
 
-
     this.scene.add(snowflake);
   }
 
@@ -193,7 +249,6 @@ export default class Intro {
     question.position.set(100, -310, 100);
     question.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
     question.scale.set(1.5, -1.5, 1.5);
-
 
     this.scene.add(question);
   }
