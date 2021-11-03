@@ -12,6 +12,9 @@ import ModelObject from './StoryScene/utils/modelObject.js';
 import {
   loadModel
 } from './StoryScene/utils/loadModel.js';
+import {
+  OrbitControls
+} from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 
 
 export default class Intro {
@@ -66,8 +69,10 @@ export default class Intro {
 
     this.scene = new THREE.Scene();
 
-    this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 1200);
-    this.camera.position.z = 1200;
+    this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 3000);
+    this.camera.position.z = 1405;
+
+    this.controls = new OrbitControls(this.camera, document.getElementById('top'));
 
     this.color = new THREE.Color(0x5f458c);
     this.alpha = 1;
@@ -113,6 +118,7 @@ export default class Intro {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+    this.controls.update();
 
     if (this.isAnim) {
       requestAnimationFrame(this.render);
@@ -128,7 +134,7 @@ export default class Intro {
   getLight() {
     const light = new THREE.Group();
 
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.3);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.5);
     lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
     light.add(lightUnit);
 
@@ -174,7 +180,7 @@ export default class Intro {
 
     loadModel(model, null, (mesh) => {
       mesh.name = model.name;
-      mesh.position.set(-80, -180, 40);
+      mesh.position.set(-80, -180, 150);
       mesh.rotation.copy(new THREE.Euler(degToRadians(30), degToRadians(-135), degToRadians(15)), `XYZ`);
       mesh.scale.set(0.6, 0.6, 0.6);
       this.scene.add(mesh);
@@ -186,7 +192,7 @@ export default class Intro {
 
     loadModel(model, null, (mesh) => {
       mesh.name = model.name;
-      mesh.position.set(-500, -280, 40);
+      mesh.position.set(-500, -280, 250);
       mesh.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(0), degToRadians(130)), `XYZ`);
       mesh.scale.set(1.5, 1.5, 1.5);
       this.scene.add(mesh);
@@ -216,7 +222,7 @@ export default class Intro {
   async getFlamingo() {
     const flamingo = await new SVGObject(`flamingo`).getObject();
 
-    flamingo.position.set(-320, 390, 50);
+    flamingo.position.set(-320, 390, 150);
     flamingo.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
     flamingo.scale.set(-2, -2, 2);
 
