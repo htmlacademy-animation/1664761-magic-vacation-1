@@ -1,9 +1,9 @@
 import * as THREE from 'three';
 import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
-import SVGObject from './StoryScene/utils/svgObject';
+import SVGObject from './StoryScene/utils/svgObject.js';
 import {
   degToRadians
-} from './story.js';
+} from '../helpers/utilities.js';
 import {
   colors,
   reflectivity
@@ -12,6 +12,9 @@ import ModelObject from './StoryScene/utils/modelObject.js';
 import {
   loadModel
 } from './StoryScene/utils/loadModel.js';
+import {
+  loadSVG
+} from './StoryScene/utils/svgLoader.js';
 import {
   OrbitControls
 } from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
@@ -135,7 +138,7 @@ export default class Intro {
     const light = new THREE.Group();
 
     let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.5);
-    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    lightUnit.position.set(0, this.camera.position.z * Math.tan(degToRadians(-15)), this.camera.position.z);
     light.add(lightUnit);
 
     lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
@@ -199,13 +202,13 @@ export default class Intro {
     });
   }
 
-  async getKeyhole() {
-    const keyhole = await new SVGObject(`keyhole`).getObject();
+  getKeyhole() {
+    loadSVG(`keyhole`, (svgGroup) => {
+      svgGroup.position.set(-1500, 1515, 0);
+      svgGroup.scale.set(1.5, -1.5, 1.5);
 
-    keyhole.position.set(-1500, 1515, 0);
-    keyhole.scale.set(1.5, -1.5, 1.5);
-
-    this.scene.add(keyhole);
+      this.scene.add(svgGroup);
+    });
   }
 
   getDummy() {
@@ -219,44 +222,44 @@ export default class Intro {
     this.scene.add(dummyMesh);
   }
 
-  async getFlamingo() {
-    const flamingo = await new SVGObject(`flamingo`).getObject();
+  getFlamingo() {
+    loadSVG(`flamingo`, (svgGroup) => {
+      svgGroup.position.set(-320, 390, 150);
+      svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
+      svgGroup.scale.set(2, -2, 2);
 
-    flamingo.position.set(-320, 390, 150);
-    flamingo.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
-    flamingo.scale.set(-2, -2, 2);
-
-    this.scene.add(flamingo);
+      this.scene.add(svgGroup);
+    });
   }
 
-  async getLeaf() {
-    const leaf = await new SVGObject(`leaf-intro`).getObject();
+  getLeaf() {
+    loadSVG(`leaf-intro`, (svgGroup) => {
+      svgGroup.position.set(560, 230, 50);
+      svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
+      svgGroup.scale.set(1, -1, 1);
 
-    leaf.position.set(560, 230, 50);
-    leaf.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
-    leaf.scale.set(1, -1, 1);
-
-    this.scene.add(leaf);
+      this.scene.add(svgGroup);
+    });
   }
 
-  async getSnowflake() {
-    const snowflake = await new SVGObject(`snowflake`).getObject();
+  getSnowflake() {
+    loadSVG(`snowflake`, (svgGroup) => {
+      svgGroup.position.set(-300, -10, 100);
+      svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
+      svgGroup.scale.set(1.3, 1.3, 1.3);
 
-    snowflake.position.set(-300, -10, 100);
-    snowflake.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
-    snowflake.scale.set(1.3, 1.3, 1.3);
-
-    this.scene.add(snowflake);
+      this.scene.add(svgGroup);
+    });
   }
 
-  async getQuestion() {
-    const question = await new SVGObject(`question`).getObject();
+  getQuestion() {
+    loadSVG(`question`, (svgGroup) => {
+      svgGroup.position.set(100, -310, 100);
+      svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
+      svgGroup.scale.set(1.5, -1.5, 1.5);
 
-    question.position.set(100, -310, 100);
-    question.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
-    question.scale.set(1.5, -1.5, 1.5);
-
-    this.scene.add(question);
+      this.scene.add(svgGroup);
+    });
   }
 
 }

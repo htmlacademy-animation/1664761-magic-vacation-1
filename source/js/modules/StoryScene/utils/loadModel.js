@@ -42,7 +42,7 @@ export const loadModel = (params, material, callback) => {
   if (!params) {
     return;
   }
-
+  
   const Loader = LoaderByType[params.type];
   const loadingFn = LoadingFnByType[params.type];
   if (!Loader || !loadingFn) {

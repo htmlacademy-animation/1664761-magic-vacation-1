@@ -1,15 +1,30 @@
 import * as THREE from 'three';
 import {
-  degToRadians
-} from '../story.js';
-import SVGObject from './utils/svgObject.js';
+  degToRadians,
+  setMaterial
+} from '../../helpers/utilities.js';
+import {
+  loadSVG
+} from './utils/svgLoader.js';
 import Rug from './objects/Rug.js';
 import Saturn from './objects/Saturn.js';
+import {
+  colors,
+  reflectivity
+} from '../../helpers/colorsAndReflection.js';
+import Floor from './objects/Floor.js';
+import {
+  loadModel
+} from './utils/loadModel.js';
+import ModelObject from '../StoryScene/utils/modelObject.js';
 
 
 class StoryScene4 extends THREE.Group {
   constructor() {
     super();
+
+    this.wall;
+    this.floor;
 
     this.isDark = true;
 
@@ -20,12 +35,45 @@ class StoryScene4 extends THREE.Group {
     this.getSaturn();
     this.getRug();
     this.getFlower();
+    this.getWall();
+    this.getFloor();
+    this.addSceneStatic();
+  }
+
+  getWall() {
+    const model = new ModelObject('wallCornerUnit').getObject();
+
+    loadModel(model, setMaterial({
+      color: colors.ShadowedPurple,
+      side: THREE.DoubleSide,
+      ...reflectivity.basic
+    }), (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
+  }
+
+  getFloor() {
+    const mesh = new Floor({
+      color: colors.ShadowedDarkPurple,
+      ...reflectivity.soft
+    });
+    this.add(mesh);
+  }
+
+  addSceneStatic() {
+    const model = new ModelObject('scene4').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
   }
 
   getSaturn() {
     const saturn = new Saturn(this.isDark);
 
-    saturn.position.set(85, 245, 100);
+    saturn.position.set(350, 500, 200);
 
     this.add(saturn);
   }
@@ -33,22 +81,17 @@ class StoryScene4 extends THREE.Group {
   getRug() {
     const rug = new Rug(this.isDark);
 
-    rug.position.set(20, -105, 0);
-    rug.rotation.copy(new THREE.Euler(degToRadians(14), degToRadians(-47), 0), `XYZ`);
-    rug.scale.set(0.7, 0.7, 0.7);
-
     this.add(rug);
   }
 
   async getFlower() {
-    const flower = await new SVGObject(`flower-scene-4`).getObject();
-    const scale = 0.7;
+    loadSVG(`flower-scene-4`, (svgGroup) => {
+      svgGroup.position.set(60, 420, 440);
+      svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), 0), `XYZ`);
+      svgGroup.scale.set(1, -1, 1);
 
-    flower.position.set(-220, 150, 200);
-    flower.rotation.copy(new THREE.Euler(0, degToRadians(40), degToRadians(5)), `XYZ`);
-    flower.scale.set(scale, -scale, scale);
-
-    this.add(flower);
+      this.add(svgGroup);
+    });
   }
 
 }

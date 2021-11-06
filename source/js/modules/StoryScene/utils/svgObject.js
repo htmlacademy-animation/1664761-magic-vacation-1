@@ -1,14 +1,14 @@
-import svgLoader from './svgLoader.js';
+import svgForms from './svgForms.js';
 
 class SVGObject {
   constructor(name) {
     this.name = name;
   }
 
-  async getObject() {
-    const svgs = await svgLoader;
-    const svg = svgs.getObjectByName(this.name);
-
+  getObject() {
+    const svg = svgForms.find(obj => {
+      return obj.name === this.name;
+    });
     return svg;
   }
 }

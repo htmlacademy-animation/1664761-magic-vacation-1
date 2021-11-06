@@ -1,3 +1,5 @@
+import * as THREE from 'three';
+
 function easeLinear(x) {
   return x;
 }
@@ -61,3 +63,17 @@ let easing = Object.freeze({
 });
 
 export default easing;
+
+export const setMaterial = (options = {}) => {
+  const {
+    color,
+    ...other
+  } = options;
+
+  return new THREE.MeshStandardMaterial({
+    color: new THREE.Color(color),
+    ...other
+  });
+};
+
+export const degToRadians = (deg) => (deg * Math.PI) / 180;

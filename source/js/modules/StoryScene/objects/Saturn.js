@@ -1,7 +1,8 @@
 import * as THREE from 'three';
 import {
-  setMaterial
-} from '../../story.js';
+  setMaterial,
+  degToRadians
+} from '../../../helpers/utilities.js';
 import {
   getLathePoints
 } from '../utils/LatheOptions.js';
@@ -54,7 +55,7 @@ class Saturn extends THREE.Group {
       color: this.color2,
       ...reflectivity.soft
     }));
-    this.ringMesh.rotation.copy(new THREE.Euler(20 * THREE.Math.DEG2RAD, 0, 18 * THREE.Math.DEG2RAD), `XYZ`);
+    this.ringMesh.rotation.copy(new THREE.Euler(degToRadians(15), 0, 0), `XYZ`);
 
     this.add(this.ringMesh);
   }

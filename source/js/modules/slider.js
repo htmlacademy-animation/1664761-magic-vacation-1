@@ -43,6 +43,7 @@ export default () => {
       storySlider = new Swiper(`.js-slider`, {
         slidesPerView: 2,
         slidesPerGroup: 2,
+        allowTouchMove: false,
         pagination: {
           el: `.swiper-pagination`,
           type: `fraction`

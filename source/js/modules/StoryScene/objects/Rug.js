@@ -1,8 +1,5 @@
 import * as THREE from 'three';
 import {
-  setMaterial
-} from '../../story.js';
-import {
   getLathePoints,
   getLatheDegrees
 } from '../utils/LatheOptions.js';
