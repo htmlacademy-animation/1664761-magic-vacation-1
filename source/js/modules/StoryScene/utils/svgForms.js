@@ -9,7 +9,8 @@ const svgForms = [{
     depth: 8,
     cap: 2,
     color: colors.LightDominantRed,
-    reflectivity: reflectivity.soft
+    reflectivity: reflectivity.soft,
+    castShadow: true
   },
 
   {
@@ -18,7 +19,8 @@ const svgForms = [{
     depth: 8,
     cap: 2,
     color: colors.Blue,
-    reflectivity: reflectivity.basic
+    reflectivity: reflectivity.basic,
+    castShadow: true
   },
 
   {
@@ -27,7 +29,8 @@ const svgForms = [{
     depth: 8,
     cap: 2,
     color: colors.Blue,
-    reflectivity: reflectivity.basic
+    reflectivity: reflectivity.basic,
+    castShadow: true
   },
 
   {
@@ -45,7 +48,8 @@ const svgForms = [{
     depth: 3,
     cap: 3,
     color: colors.Green,
-    reflectivity: reflectivity.basic
+    reflectivity: reflectivity.basic,
+    castShadow: true
   },
 
   {
@@ -54,7 +58,8 @@ const svgForms = [{
     depth: 3,
     cap: 3,
     color: colors.Green,
-    reflectivity: reflectivity.basic
+    reflectivity: reflectivity.basic,
+    castShadow: true
   },
 
   {
@@ -63,7 +68,8 @@ const svgForms = [{
     depth: 3,
     cap: 3,
     color: colors.Green,
-    reflectivity: reflectivity.basic
+    reflectivity: reflectivity.basic,
+    castShadow: true
   },
 
   {
@@ -81,6 +87,7 @@ const svgForms = [{
     depth: 4,
     cap: 2,
     color: colors.AdditionalPurple,
+    castShadow: true
   },
 
   {
@@ -89,6 +96,7 @@ const svgForms = [{
     depth: 4,
     cap: 2,
     color: colors.ShadowedAdditionalPurple,
+    castShadow: true
   },
 
 ];

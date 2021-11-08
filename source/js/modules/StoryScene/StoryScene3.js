@@ -32,12 +32,13 @@ class StoryScene3 extends THREE.Group {
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
+    this.getCompass();
   }
 
   getWall() {
     const model = new ModelObject('wallCornerUnit').getObject();
 
-    loadModel(model, setMaterial({
+    loadModel(model, true, setMaterial({
       color: colors.SkyLightBlue,
       side: THREE.DoubleSide,
       ...reflectivity.soft
@@ -58,14 +59,14 @@ class StoryScene3 extends THREE.Group {
   addSceneStatic() {
     const model = new ModelObject('scene3').getObject();
 
-    loadModel(model, null, (mesh) => {
+    loadModel(model, true, null, (mesh) => {
       mesh.name = model.name;
       this.add(mesh);
     });
   }
 
   getSnowman() {
-    const snowman = new Snowman();
+    const snowman = new Snowman(true);
 
     snowman.position.set(220, 220, 400);
 
@@ -76,6 +77,15 @@ class StoryScene3 extends THREE.Group {
     const road = new Road();
 
     this.add(road);
+  }
+
+  getCompass() {
+    const model = new ModelObject('compass').getObject();
+
+    loadModel(model, true, null, (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
   }
 }
 

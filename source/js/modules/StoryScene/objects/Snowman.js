@@ -7,11 +7,16 @@ import {
   colors,
   reflectivity
 } from '../../../helpers/colorsAndReflection.js';
+import {
+  isShadow
+} from '../../../helpers/isShadow.js';
 
 
 class Snowman extends THREE.Group {
-  constructor() {
+  constructor(isShadow) {
     super();
+
+    this.isShadow = isShadow;
 
     this.constructChildren();
   }
@@ -20,6 +25,7 @@ class Snowman extends THREE.Group {
     this.getHead();
     this.getBody();
     this.getCarrot();
+    isShadow(this);
   }
 
   getHead() {

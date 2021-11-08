@@ -10,12 +10,16 @@ import {
   colors,
   reflectivity
 } from '../../../helpers/colorsAndReflection.js';
+import {
+  isShadow
+} from '../../../helpers/isShadow.js';
 
 class Saturn extends THREE.Group {
-  constructor(isDark) {
+  constructor(isDark, isShadow) {
     super();
 
     this.isDark = isDark;
+    this.isShadow = isShadow;
 
     this.color1 = this.isDark ? colors.ShadowedDominantRed : colors.DominantRed;
     this.color2 = this.isDark ? colors.ShadowedBrightPurple : colors.BrightPurple;
@@ -35,6 +39,8 @@ class Saturn extends THREE.Group {
     this.getRing();
     this.getCylinder();
     this.getSphereSmall();
+
+    isShadow(this);
   }
 
   getSphereBig() {

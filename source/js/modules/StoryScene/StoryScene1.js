@@ -33,6 +33,7 @@ class StoryScene1 extends THREE.Group {
     this.getFlower();
     this.getRug();
     this.getSaturn();
+    this.getDog();
     this.getWall();
     this.getFloor();
     this.addSceneStatic();
@@ -41,7 +42,7 @@ class StoryScene1 extends THREE.Group {
   getWall() {
     const model = new ModelObject('wallCornerUnit').getObject();
 
-    loadModel(model, setMaterial({
+    loadModel(model, true, setMaterial({
       color: colors.Purple,
       side: THREE.DoubleSide,
       ...reflectivity.soft
@@ -62,14 +63,14 @@ class StoryScene1 extends THREE.Group {
   addSceneStatic() {
     const model = new ModelObject('scene1').getObject();
 
-    loadModel(model, null, (mesh) => {
+    loadModel(model, true, null, (mesh) => {
       mesh.name = model.name;
       this.add(mesh);
     });
   }
 
   getFlower() {
-    loadSVG(`flower`, (svgGroup) => {
+    loadSVG(`flower`, true, (svgGroup) => {
       svgGroup.position.set(60, 420, 440);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(0), degToRadians(90), degToRadians(0)), `XYZ`);
       svgGroup.scale.set(1, -1, 1);
@@ -85,11 +86,24 @@ class StoryScene1 extends THREE.Group {
   }
 
   getSaturn() {
-    const saturn = new Saturn();
+    const saturn = new Saturn(false, true);
 
     saturn.position.set(350, 500, 200);
 
     this.add(saturn);
+  }
+
+  getDog() {
+    const model = new ModelObject('dog').getObject();
+
+    loadModel(model, true, null, (mesh) => {
+      mesh.name = model.name;
+
+      mesh.position.set(500, 0, 430);
+      mesh.rotation.copy(new THREE.Euler(0, degToRadians(60), 0));
+
+      this.add(mesh);
+    });
   }
 
 }
