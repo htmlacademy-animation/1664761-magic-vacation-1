@@ -1,14 +1,27 @@
 import * as THREE from 'three';
-import {
-  degToRadians
-} from '../story.js';
 import Snowman from './objects/Snowman.js';
 import Road from './objects/Road.js';
+import {
+  degToRadians,
+  setMaterial
+} from '../../helpers/utilities.js';
+import {
+  colors,
+  reflectivity
+} from '../../helpers/colorsAndReflection.js';
+import Floor from './objects/Floor.js';
+import {
+  loadModel
+} from './utils/loadModel.js';
+import ModelObject from '../StoryScene/utils/modelObject.js';
 
 
 class StoryScene3 extends THREE.Group {
   constructor() {
     super();
+
+    this.wall;
+    this.floor;
 
     this.constructChildren();
   }
@@ -16,24 +29,51 @@ class StoryScene3 extends THREE.Group {
   constructChildren() {
     this.getSnowman();
     this.getRoad();
+    this.getWall();
+    this.getFloor();
+    this.addSceneStatic();
+  }
+
+  getWall() {
+    const model = new ModelObject('wallCornerUnit').getObject();
+
+    loadModel(model, setMaterial({
+      color: colors.SkyLightBlue,
+      side: THREE.DoubleSide,
+      ...reflectivity.soft
+    }), (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
+  }
+
+  getFloor() {
+    const mesh = new Floor({
+      color: colors.MountainBlue,
+      ...reflectivity.soft
+    });
+    this.add(mesh);
+  }
+
+  addSceneStatic() {
+    const model = new ModelObject('scene3').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
   }
 
   getSnowman() {
     const snowman = new Snowman();
 
-    snowman.scale.set(0.95, 0.95, 0.95);
-    snowman.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(-50), 0, 'XYZ'));
-    snowman.position.set(-130, -15, 0);
+    snowman.position.set(220, 220, 400);
 
     this.add(snowman);
   }
 
   getRoad() {
     const road = new Road();
-
-    road.scale.set(0.75, 0.75, 0.75);
-    road.rotation.copy(new THREE.Euler(degToRadians(13), degToRadians(-45), 0), `XYZ`);
-    road.position.set(0, -100, 0);
 
     this.add(road);
   }

@@ -1,15 +1,30 @@
 import * as THREE from 'three';
 import {
-  degToRadians
-} from '../story.js';
-import SVGObject from './utils/svgObject.js';
+  degToRadians,
+  setMaterial
+} from '../../helpers/utilities.js';
 import Rug from './objects/Rug.js';
 import Saturn from './objects/Saturn.js';
+import Floor from './objects/Floor.js';
+import {
+  loadSVG
+} from './utils/svgLoader.js';
+import {
+  loadModel
+} from './utils/loadModel.js';
+import {
+  colors,
+  reflectivity
+} from '../../helpers/colorsAndReflection.js';
+import ModelObject from '../StoryScene/utils/modelObject.js';
 
 
 class StoryScene1 extends THREE.Group {
   constructor() {
     super();
+
+    this.wall;
+    this.floor;
 
     this.constructChildren();
   }
@@ -18,24 +33,53 @@ class StoryScene1 extends THREE.Group {
     this.getFlower();
     this.getRug();
     this.getSaturn();
+    this.getWall();
+    this.getFloor();
+    this.addSceneStatic();
   }
 
-  async getFlower() {
-    const flower = await new SVGObject(`flower`).getObject();
+  getWall() {
+    const model = new ModelObject('wallCornerUnit').getObject();
 
-    flower.position.set(-290, 165, 100);
-    flower.rotation.copy(new THREE.Euler(degToRadians(180), degToRadians(-20), degToRadians(-8)), `XYZ`);
-    flower.scale.set(0.8, 0.8, 0.8);
+    loadModel(model, setMaterial({
+      color: colors.Purple,
+      side: THREE.DoubleSide,
+      ...reflectivity.soft
+    }), (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
+  }
 
-    this.add(flower);
+  getFloor() {
+    const mesh = new Floor({
+      color: colors.DarkPurple,
+      ...reflectivity.soft
+    });
+    this.add(mesh);
+  }
+
+  addSceneStatic() {
+    const model = new ModelObject('scene1').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
+  }
+
+  getFlower() {
+    loadSVG(`flower`, (svgGroup) => {
+      svgGroup.position.set(60, 420, 440);
+      svgGroup.rotation.copy(new THREE.Euler(degToRadians(0), degToRadians(90), degToRadians(0)), `XYZ`);
+      svgGroup.scale.set(1, -1, 1);
+
+      this.add(svgGroup);
+    });
   }
 
   getRug() {
     const rug = new Rug();
-
-    rug.position.set(0, -115, 0);
-    rug.rotation.copy(new THREE.Euler(degToRadians(13), degToRadians(-52), 0), `XYZ`);
-    rug.scale.set(0.7, 0.7, 0.7);
 
     this.add(rug);
   }
@@ -43,7 +87,7 @@ class StoryScene1 extends THREE.Group {
   getSaturn() {
     const saturn = new Saturn();
 
-    saturn.position.set(57, 237, 100);
+    saturn.position.set(350, 500, 200);
 
     this.add(saturn);
   }

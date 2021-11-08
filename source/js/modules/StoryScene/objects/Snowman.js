@@ -2,7 +2,7 @@ import * as THREE from 'three';
 import {
   setMaterial,
   degToRadians
-} from '../../story.js';
+} from '../../../helpers/utilities.js';
 import {
   colors,
   reflectivity

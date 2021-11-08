@@ -2,15 +2,29 @@ import * as THREE from 'three';
 import {
   setMaterial,
   degToRadians
-} from '../story.js';
+} from '../../helpers/utilities.js';
 import Lamp from './objects/Lamp.js';
 import SVGObject from './utils/svgObject.js';
-import { colors, reflectivity } from '../../helpers/colorsAndReflection.js';
+import {
+  colors,
+  reflectivity
+} from '../../helpers/colorsAndReflection.js';
+import Floor from './objects/Floor.js';
+import {
+  loadSVG
+} from './utils/svgLoader.js';
+import {
+  loadModel
+} from './utils/loadModel.js';
+import ModelObject from '../StoryScene/utils/modelObject.js';
 
 
 class StoryScene2 extends THREE.Group {
   constructor() {
     super();
+
+    this.wall;
+    this.floor;
 
     this.constructChildren();
   }
@@ -20,14 +34,51 @@ class StoryScene2 extends THREE.Group {
     this.getLamp();
     this.loadLeaf1();
     this.loadLeaf2();
+    this.getWall();
+    this.getFloor();
+    this.addSceneStatic();
+  }
+
+  getWall() {
+    const model = new ModelObject('wallCornerUnit').getObject();
+
+    loadModel(model, setMaterial({
+      color: colors.Blue,
+      side: THREE.DoubleSide,
+      ...reflectivity.basic
+    }), (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
+  }
+
+  getFloor() {
+    const mesh = new Floor({
+      color: colors.BrightBlue,
+      ...reflectivity.soft
+    });
+    this.add(mesh);
+  }
+
+  addSceneStatic() {
+    const model = new ModelObject('scene2').getObject();
+
+    loadModel(model, null, (mesh) => {
+      mesh.name = model.name;
+      this.add(mesh);
+    });
   }
 
   getPyramid() {
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(250, 280, 4), setMaterial({color: colors.Blue, flatShading: true, ...reflectivity.soft}));
+    const mesh = new THREE.Mesh(new THREE.ConeGeometry(250, 280, 4), setMaterial({
+      color: colors.Blue,
+      flatShading: true,
+      ...reflectivity.soft
+    }));
 
-    mesh.scale.set(0.45, 0.6, 0.45);
-    mesh.rotation.copy(new THREE.Euler(degToRadians(10), 0, 0, 'XZY'));
-    mesh.position.set(-8, -155, 15);
+    mesh.scale.set(1, 1.2, 1);
+    mesh.rotation.copy(new THREE.Euler(0, degToRadians(45), 0, 'XYZ'));
+    mesh.position.set(230, 90, 260);
 
     this.add(mesh);
   }
@@ -35,31 +86,31 @@ class StoryScene2 extends THREE.Group {
   getLamp() {
     const lamp = new Lamp();
 
-    lamp.position.set(265, -115, 80);
-    lamp.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(60), 0, 'XYZ'));
+    lamp.position.set(650, 173, 120);
+    lamp.rotation.copy(new THREE.Euler(degToRadians(0), degToRadians(20), 0, 'XYZ'));
     lamp.scale.set(0.7, 0.7, 0.7);
 
     this.add(lamp);
   }
 
-  async loadLeaf1() {
-    const leaf = await new SVGObject(`leaf1-scene2`).getObject();
+  loadLeaf1() {
+    loadSVG(`leaf1-scene2`, (svgGroup) => {
+      svgGroup.position.set(80, 250, 350);
+      svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), degToRadians(-10)), `XYZ`);
+      svgGroup.scale.set(2, -2, 2);
 
-    leaf.position.set(-180, -40, 20);
-    leaf.rotation.copy(new THREE.Euler(0, degToRadians(10), degToRadians(-1)), `XYZ`);
-    leaf.scale.set(1.5, -1.5, 1.5);
-
-    this.add(leaf);
+      this.add(svgGroup);
+    });
   }
 
-  async loadLeaf2() {
-    const leaf = await new SVGObject(`leaf2-scene2`).getObject();
+  loadLeaf2() {
+    loadSVG(`leaf2-scene2`, (svgGroup) => {
+      svgGroup.position.set(65, 120, 420);
+      svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), degToRadians(35)), `XYZ`);
+      svgGroup.scale.set(1.5, -1.5, 1.5);
 
-    leaf.position.set(-210, -200, 10);
-    leaf.rotation.copy(new THREE.Euler(0, degToRadians(10), degToRadians(45)), `XYZ`);
-    leaf.scale.set(1.2, -1.2, 1.2);
-
-    this.add(leaf);
+      this.add(svgGroup);
+    });
   }
 
 }

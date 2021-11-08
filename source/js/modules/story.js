@@ -3,22 +3,12 @@ import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
 import {
   animateFPS
 } from '../helpers/animate.js';
-import StoryScene1 from './StoryScene/StoryScene1.js';
-import StoryScene2 from './StoryScene/StoryScene2.js';
-import StoryScene3 from './StoryScene/StoryScene3.js';
-import StoryScene4 from './StoryScene/StoryScene4.js';
+import SceneAllStory from './StoryScene/StorySceneAll.js';
+import {
+  OrbitControls
+} from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
+import { degToRadians } from '../helpers/utilities';
 
-
-export const setMaterial = (options = {}) => {
-  const {color, ...other} = options;
-
-  return new THREE.MeshStandardMaterial({
-    color: new THREE.Color(color),
-    ...other
-  });
-};
-
-export const degToRadians = (deg) => (deg * Math.PI) / 180;
 
 export class Story {
   constructor() {
@@ -35,7 +25,7 @@ export class Story {
         options: {
           hue: 0.0
         },
-        scene: new StoryScene1()
+        // scene: new StoryScene1()
       },
       {
         src: `./img/module-5/scenes-textures/scene-2.png`,
@@ -51,21 +41,21 @@ export class Story {
             },
           },
         },
-        scene: new StoryScene2()
+        // scene: new StoryScene2()
       },
       {
         src: './img/module-5/scenes-textures/scene-3.png',
         options: {
           hue: 0.0
         },
-        scene: new StoryScene3()
+        // scene: new StoryScene3()
       },
       {
         src: './img/module-5/scenes-textures/scene-4.png',
         options: {
           hue: 0.0
         },
-        scene: new StoryScene4()
+        // scene: new StoryScene4()
       },
     ];
 
@@ -140,9 +130,11 @@ export class Story {
     this.canvas.height = this.height;
 
     this.scene = new THREE.Scene();
+    this.addSceneAllStory();
 
-    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 1500);
-    this.camera.position.z = 1500;
+    this.camera = new THREE.PerspectiveCamera(35, this.aspectRation, 0.1, 2550);
+
+    this.controls = new OrbitControls(this.camera, document.getElementById('story'));
 
     this.color = new THREE.Color(0x5f458c);
     this.alpha = 1;
@@ -158,47 +150,25 @@ export class Story {
     this.renderer.setPixelRatio(window.devicePixelRatio);
     this.renderer.setSize(this.width, this.height);
 
-    const loadManager = new THREE.LoadingManager();
-    const textureLoader = new THREE.TextureLoader(loadManager);
-    const loadedTextures = this.textures.map((texture) => ({
-      src: textureLoader.load(texture.src),
-      options: texture.options,
-      scene: texture.scene
-    }));
-    const geometry = new THREE.PlaneGeometry(1, 1);
+    const lights = this.getLight();
+    this.lights = lights;
+    this.lights.position.z = this.camera.position.z;
+    this.scene.add(this.lights);
+
+    this.isAnim = true;
 
 
-    loadManager.onLoad = () => {
-      loadedTextures.forEach((texture, i) => {
-        const material = new THREE.RawShaderMaterial(helperRawShaderMaterial({
-          map: {
-            value: texture.src
-          },
-          options: {
-            value: texture.options
-          },
-          ...this.addBubble(i),
-        }));
-        const image = new THREE.Mesh(geometry, material);
-        image.scale.x = this.textureWidth;
-        image.scale.y = this.textureHeight;
-        image.position.x = this.textureWidth * i;
+    this.render();
+  }
 
-        const lights = this.getLight();
-        lights.position.z = this.camera.position.z;
-        
-        if (texture.scene) {
-          texture.scene.position.x = this.textureWidth * i;
-          this.scene.add(texture.scene);
-          lights.position.x = this.textureWidth * i;
-        }
-        
-        this.scene.add(lights);
-        this.scene.add(image);
+  addSceneAllStory() {
+    const sceneAllStory = new SceneAllStory();
 
-      });
-      this.render();
-    };
+    sceneAllStory.position.set(0, 0, -3000);
+    sceneAllStory.rotation.copy(new THREE.Euler(0, degToRadians(-45), 0));
+
+    this.SceneAllStory = sceneAllStory;
+    this.scene.add(sceneAllStory);
   }
 
   resetHueShift() {
@@ -268,8 +238,9 @@ export class Story {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+    this.controls.update();
 
-    if (activeScene == 1) {
+    if (this.isAnim) {
       requestAnimationFrame(this.render);
     } else {
       cancelAnimationFrame(this.render);
@@ -277,10 +248,10 @@ export class Story {
   }
 
   setScene(i) {
-    this.camera.position.x = this.textureWidth * i;
     this.render();
 
     activeScene = i;
+    let angle = 0;
 
     if (i == 1) {
       if (animHueKey != true) {
@@ -297,13 +268,41 @@ export class Story {
     } else {
       animHueKey = false;
     }
+
+    if (i == 0) {
+      angle = 90;
+    } else if (i == 1) {
+      angle = 0;
+    } else if (i == 2) {
+      angle = -90;
+    } else if (i == 3) {
+      angle = 180;
+    }
+
+    this.setCamera(angle);
+  }
+
+  setCamera(angle) {
+    const posX = 2250 * Math.cos(degToRadians(angle));
+    const posZ = 2250 * Math.sin(degToRadians(angle));
+
+    this.camera.position.set(this.SceneAllStory.position.x + posX, 800, this.SceneAllStory.position.z + posZ);
+
+    this.controls.target.set(this.SceneAllStory.position.x, this.SceneAllStory.position.y, this.SceneAllStory.position.z);
+
+    this.setPositionLight();
+  }
+
+  setPositionLight() {
+    this.lights.position.x = this.camera.position.x;
+    this.lights.position.z = this.camera.position.z;
   }
 
   getLight() {
     const light = new THREE.Group();
 
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.3);
-    lightUnit.position.set(0, this.camera.position.z * Math.tan(-15 * THREE.Math.DEG2RAD), this.camera.position.z);
+    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.8);
+    lightUnit.position.set(0, 1000, 3000);
     light.add(lightUnit);
 
     lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
