@@ -18,6 +18,9 @@ import {
 import {
   OrbitControls
 } from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
+import {
+  animIntroObj
+} from '../helpers/animate.js';
 
 
 export default class Intro {
@@ -114,9 +117,8 @@ export default class Intro {
 
       this.scene.add(image);
       this.render();
+      this.startAnimimations();
     };
-
-    this.render();
   }
 
   render() {
@@ -164,6 +166,53 @@ export default class Intro {
     this.getDummy();
   }
 
+  setOptAnimObj() {
+    this.flamingo.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [-2, -2, 2],
+      startPosition: [0, 0, 100],
+      finishPosition: [-480, 370, 100],
+      amp: -0.3,
+      period: 0.3
+    };
+
+    this.watermelon.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [1, 1, 1],
+      startPosition: [0, 0, 100],
+      finishPosition: [-300, -150, 800],
+      amp: -0.3,
+      period: 0.3
+    };
+
+    this.leaf.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [1.4, -1.4, 1.4],
+      startPosition: [0, 0, 100],
+      finishPosition: [660, 350, 150],
+      amp: 0.3,
+      period: 0.3
+    };
+
+    this.question.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [1.6, -1.6, 1.6],
+      startPosition: [0, 0, 100],
+      finishPosition: [100, -330, 100],
+      amp: -0.2,
+      period: 0.3
+    };
+
+    this.snowflake.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [1.4, 1.4, 1.4],
+      startPosition: [0, 0, 100],
+      finishPosition: [-450, -10, 100],
+      amp: 0.3,
+      period: 0.2
+    };
+  }
+
   getAirplane() {
     const model = new ModelObject('airplane').getObject();
 
@@ -174,6 +223,7 @@ export default class Intro {
       mesh.name = model.name;
       mesh.position.set(150, 80, 100);
       mesh.rotation.copy(new THREE.Euler(degToRadians(80), degToRadians(120), degToRadians(-30)), `XYZ`);
+      this.airplane = mesh;
       this.scene.add(mesh);
     });
   }
@@ -186,6 +236,7 @@ export default class Intro {
       mesh.position.set(-80, -180, 150);
       mesh.rotation.copy(new THREE.Euler(degToRadians(30), degToRadians(-135), degToRadians(15)), `XYZ`);
       mesh.scale.set(0.6, 0.6, 0.6);
+      this.suitcase = mesh;
       this.scene.add(mesh);
     });
   }
@@ -197,7 +248,8 @@ export default class Intro {
       mesh.name = model.name;
       mesh.position.set(-500, -280, 250);
       mesh.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(0), degToRadians(130)), `XYZ`);
-      mesh.scale.set(1.5, 1.5, 1.5);
+      mesh.scale.set(0, 0, 0);
+      this.watermelon = mesh;
       this.scene.add(mesh);
     });
   }
@@ -226,8 +278,9 @@ export default class Intro {
     loadSVG(`flamingo`, true, (svgGroup) => {
       svgGroup.position.set(-320, 390, 150);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
-      svgGroup.scale.set(2, -2, 2);
+      svgGroup.scale.set(0, 0, 0);
 
+      this.flamingo = svgGroup;
       this.scene.add(svgGroup);
     });
   }
@@ -236,8 +289,9 @@ export default class Intro {
     loadSVG(`leaf-intro`, true, (svgGroup) => {
       svgGroup.position.set(560, 230, 50);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
-      svgGroup.scale.set(1, -1, 1);
+      svgGroup.scale.set(0, 0, 0);
 
+      this.leaf = svgGroup;
       this.scene.add(svgGroup);
     });
   }
@@ -246,8 +300,9 @@ export default class Intro {
     loadSVG(`snowflake`, true, (svgGroup) => {
       svgGroup.position.set(-300, -10, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
-      svgGroup.scale.set(1.3, 1.3, 1.3);
+      svgGroup.scale.set(0, 0, 0);
 
+      this.snowflake = svgGroup;
       this.scene.add(svgGroup);
     });
   }
@@ -256,10 +311,25 @@ export default class Intro {
     loadSVG(`question`, true, (svgGroup) => {
       svgGroup.position.set(100, -310, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
-      svgGroup.scale.set(1.5, -1.5, 1.5);
+      svgGroup.scale.set(0, 0, 0);
 
+      this.question = svgGroup;
       this.scene.add(svgGroup);
     });
   }
 
+  startAnimimations() {
+    const duration = 1500;
+    this.objectsArr = [
+      this.watermelon,
+      this.flamingo,
+      this.leaf,
+      this.question,
+      this.snowflake
+    ];
+
+    this.setOptAnimObj();
+
+    animIntroObj(this.objectsArr, duration, 'easeOutCubic');
+  }
 }

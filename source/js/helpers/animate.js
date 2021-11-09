@@ -1,12 +1,14 @@
-import easing from './utilities.js';
-import {activeScene} from '../modules/story.js';
+import easingFunc from './utilities.js';
+import {
+  activeScene
+} from '../modules/story.js';
 
 export class Animation {
   constructor(options) {
     this.options = options;
 
     if (!this.options.easing) {
-      this.options.easing = easing.easeLinear;
+      this.options.easing = easingFunc.easeLinear;
     }
 
     if (!this.options.duration) {
@@ -139,6 +141,64 @@ export const animateFPS = (render, duration, fps, endCB = () => {}) => {
     if (activeScene == 1) {
       requestAnimationFrame(loop);
     }
+  }
+
+  loop();
+};
+
+export const tick = (from, to, progress) => from + progress * (to - from);
+
+export const animareFluctuationIntroObj = (items) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) * 0.0001;
+
+    items.forEach(item => {
+      item.position.y = item.position.y + item.optAnim.amp * Math.sin((2 * Math.PI * progress) / item.optAnim.period);
+    });
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) / duration;
+
+    const easing = easingFunc[`${ease}`](progress);
+
+    items.forEach(item => {
+      const scaleX = tick(item.optAnim.startScale[0], item.optAnim.finishScale[0], easing);
+      const scaleY = tick(item.optAnim.startScale[1], item.optAnim.finishScale[1], easing);
+      const scaleZ = tick(item.optAnim.startScale[2], item.optAnim.finishScale[2], easing);
+
+      const positionX = tick(item.optAnim.startPosition[0], item.optAnim.finishPosition[0], easing);
+      const positionY = tick(item.optAnim.startPosition[1], item.optAnim.finishPosition[1], easing);
+      const positionZ = tick(item.optAnim.startPosition[2], item.optAnim.finishPosition[2], easing);
+
+      const scale = [scaleX, scaleY, scaleZ];
+      const position = [positionX, positionY, positionZ];
+
+      item.scale.set(...scale);
+      item.position.set(...position);
+    });
+
+    if (progress > 1) {
+      animareFluctuationIntroObj(items);
+      endCB();
+      return;
+    }
+
+    requestAnimationFrame(loop);
   }
 
   loop();
