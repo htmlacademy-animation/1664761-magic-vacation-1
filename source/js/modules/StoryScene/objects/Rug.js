@@ -20,8 +20,6 @@ class Rug extends THREE.Group {
     this.startDeg = 16;
     this.finishDeg = 74;
 
-    this.rugMesh;
-
     this.lengthStrip = (this.finishDeg - this.startDeg) / 7;
 
     this.constructChildren();
@@ -48,9 +46,9 @@ class Rug extends THREE.Group {
       }
     }));
 
-    this.rugMesh = new THREE.Mesh(base, material);
-
-    this.add(this.rugMesh);
+    const rugMesh = new THREE.Mesh(base, material);
+    rugMesh.receiveShadow = true;
+    this.add(rugMesh);
   }
 }
 

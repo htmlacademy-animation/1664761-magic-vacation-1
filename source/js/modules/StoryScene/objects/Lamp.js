@@ -3,12 +3,20 @@ import {
   setMaterial,
   degToRadians
 } from '../../../helpers/utilities.js';
-import { colors, reflectivity } from '../../../helpers/colorsAndReflection.js';
+import {
+  colors,
+  reflectivity
+} from '../../../helpers/colorsAndReflection.js';
+import {
+  isShadow
+} from '../../../helpers/isShadow.js';
 
 
 class Lamp extends THREE.Group {
-  constructor() {
+  constructor(isShadow) {
     super();
+
+    this.isShadow = isShadow;
 
     this.constructChildren();
   }
@@ -20,6 +28,8 @@ class Lamp extends THREE.Group {
     this.getPole();
     this.getLampBaseSphere();
     this.getLampBaseCylinder();
+
+    isShadow(this);
   }
 
   getLampUpper() {

@@ -167,7 +167,7 @@ export default class Intro {
   getAirplane() {
     const model = new ModelObject('airplane').getObject();
 
-    loadModel(model, this.setMaterial({
+    loadModel(model, true, this.setMaterial({
       color: model.color,
       ...model.reflectivity
     }), (mesh) => {
@@ -181,7 +181,7 @@ export default class Intro {
   getSuitcase() {
     const model = new ModelObject('suitcase').getObject();
 
-    loadModel(model, null, (mesh) => {
+    loadModel(model, true, null, (mesh) => {
       mesh.name = model.name;
       mesh.position.set(-80, -180, 150);
       mesh.rotation.copy(new THREE.Euler(degToRadians(30), degToRadians(-135), degToRadians(15)), `XYZ`);
@@ -193,7 +193,7 @@ export default class Intro {
   getWatermelon() {
     const model = new ModelObject('watermelon').getObject();
 
-    loadModel(model, null, (mesh) => {
+    loadModel(model, true, null, (mesh) => {
       mesh.name = model.name;
       mesh.position.set(-500, -280, 250);
       mesh.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(0), degToRadians(130)), `XYZ`);
@@ -203,7 +203,7 @@ export default class Intro {
   }
 
   getKeyhole() {
-    loadSVG(`keyhole`, (svgGroup) => {
+    loadSVG(`keyhole`, true, (svgGroup) => {
       svgGroup.position.set(-1500, 1515, 0);
       svgGroup.scale.set(1.5, -1.5, 1.5);
 
@@ -223,7 +223,7 @@ export default class Intro {
   }
 
   getFlamingo() {
-    loadSVG(`flamingo`, (svgGroup) => {
+    loadSVG(`flamingo`, true, (svgGroup) => {
       svgGroup.position.set(-320, 390, 150);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
       svgGroup.scale.set(2, -2, 2);
@@ -233,7 +233,7 @@ export default class Intro {
   }
 
   getLeaf() {
-    loadSVG(`leaf-intro`, (svgGroup) => {
+    loadSVG(`leaf-intro`, true, (svgGroup) => {
       svgGroup.position.set(560, 230, 50);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
       svgGroup.scale.set(1, -1, 1);
@@ -243,7 +243,7 @@ export default class Intro {
   }
 
   getSnowflake() {
-    loadSVG(`snowflake`, (svgGroup) => {
+    loadSVG(`snowflake`, true, (svgGroup) => {
       svgGroup.position.set(-300, -10, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
       svgGroup.scale.set(1.3, 1.3, 1.3);
@@ -253,7 +253,7 @@ export default class Intro {
   }
 
   getQuestion() {
-    loadSVG(`question`, (svgGroup) => {
+    loadSVG(`question`, true, (svgGroup) => {
       svgGroup.position.set(100, -310, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
       svgGroup.scale.set(1.5, -1.5, 1.5);

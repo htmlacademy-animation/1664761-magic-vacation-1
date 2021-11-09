@@ -44,6 +44,7 @@ class Road extends THREE.Group {
     }));
 
     this.roadMesh = new THREE.Mesh(base, material);
+    this.roadMesh.receiveShadow = true;
 
     this.add(this.roadMesh);
   }

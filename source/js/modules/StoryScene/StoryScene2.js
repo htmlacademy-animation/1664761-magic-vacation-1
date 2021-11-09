@@ -4,7 +4,7 @@ import {
   degToRadians
 } from '../../helpers/utilities.js';
 import Lamp from './objects/Lamp.js';
-import SVGObject from './utils/svgObject.js';
+import Pyramid from './objects/Pyramid.js';
 import {
   colors,
   reflectivity
@@ -42,7 +42,7 @@ class StoryScene2 extends THREE.Group {
   getWall() {
     const model = new ModelObject('wallCornerUnit').getObject();
 
-    loadModel(model, setMaterial({
+    loadModel(model, true, setMaterial({
       color: colors.Blue,
       side: THREE.DoubleSide,
       ...reflectivity.basic
@@ -63,28 +63,14 @@ class StoryScene2 extends THREE.Group {
   addSceneStatic() {
     const model = new ModelObject('scene2').getObject();
 
-    loadModel(model, null, (mesh) => {
+    loadModel(model, true, null, (mesh) => {
       mesh.name = model.name;
       this.add(mesh);
     });
   }
 
-  getPyramid() {
-    const mesh = new THREE.Mesh(new THREE.ConeGeometry(250, 280, 4), setMaterial({
-      color: colors.Blue,
-      flatShading: true,
-      ...reflectivity.soft
-    }));
-
-    mesh.scale.set(1, 1.2, 1);
-    mesh.rotation.copy(new THREE.Euler(0, degToRadians(45), 0, 'XYZ'));
-    mesh.position.set(230, 90, 260);
-
-    this.add(mesh);
-  }
-
   getLamp() {
-    const lamp = new Lamp();
+    const lamp = new Lamp(true);
 
     lamp.position.set(650, 173, 120);
     lamp.rotation.copy(new THREE.Euler(degToRadians(0), degToRadians(20), 0, 'XYZ'));
@@ -94,7 +80,7 @@ class StoryScene2 extends THREE.Group {
   }
 
   loadLeaf1() {
-    loadSVG(`leaf1-scene2`, (svgGroup) => {
+    loadSVG(`leaf1-scene2`, true, (svgGroup) => {
       svgGroup.position.set(80, 250, 350);
       svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), degToRadians(-10)), `XYZ`);
       svgGroup.scale.set(2, -2, 2);
@@ -104,13 +90,22 @@ class StoryScene2 extends THREE.Group {
   }
 
   loadLeaf2() {
-    loadSVG(`leaf2-scene2`, (svgGroup) => {
+    loadSVG(`leaf2-scene2`, true, (svgGroup) => {
       svgGroup.position.set(65, 120, 420);
       svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), degToRadians(35)), `XYZ`);
       svgGroup.scale.set(1.5, -1.5, 1.5);
 
       this.add(svgGroup);
     });
+  }
+
+  getPyramid() {
+    const pyramid = new Pyramid(true);
+
+    pyramid.position.set(230, 150, 260);
+    pyramid.rotation.copy(new THREE.Euler(0, degToRadians(45), 0, 'XYZ'));
+
+    this.add(pyramid);
   }
 
 }
