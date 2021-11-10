@@ -71507,6 +71507,7 @@ class Intro {
     this.render = this.render.bind(this);
 
     this.isAnim = false;
+    this.checkObj = true;
   }
 
   setMaterial(options = {}) {
@@ -71579,14 +71580,40 @@ class Intro {
       this.scene.add(lights);
 
       this.scene.add(image);
+      this.animObj();
       this.render();
-      this.startAnimimations();
     };
+  }
+
+  animObj() {
+    this.objectsArr = [
+      this.watermelon,
+      this.flamingo,
+      this.leaf,
+      this.question,
+      this.snowflake
+    ];
+
+    let i = 0;
+    this.objectsArr.forEach((item) => {
+      if (!item) {
+        i += 1;
+      }
+    });
+
+    if (i == 0) {
+      this.checkObj = false;
+      this.startAnimimations();
+    }
   }
 
   render() {
     this.renderer.render(this.scene, this.camera);
     this.controls.update();
+
+    if (this.checkObj) {
+      this.animObj();
+    }
 
     if (this.isAnim) {
       requestAnimationFrame(this.render);
@@ -71783,13 +71810,6 @@ class Intro {
 
   startAnimimations() {
     const duration = 1500;
-    this.objectsArr = [
-      this.watermelon,
-      this.flamingo,
-      this.leaf,
-      this.question,
-      this.snowflake
-    ];
 
     this.setOptAnimObj();
 
