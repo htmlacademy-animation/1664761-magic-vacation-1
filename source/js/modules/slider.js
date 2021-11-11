@@ -100,6 +100,7 @@ export default () => {
     if (e.detail.screenName === 'story') {
       story.init();
       story.setScene(0);
+      story.suitcaseIaAnim = true;
     }
   });
 };

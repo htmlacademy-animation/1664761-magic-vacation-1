@@ -203,3 +203,87 @@ export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
 
   loop();
 };
+
+export const animateScale = (item, start, finish, duration, ease, endCB = () => {}) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) / duration;
+
+    const easing = easingFunc[`${ease}`](progress);
+
+    const scaleX = tick(start[0], finish[0], easing);
+    const scaleY = tick(start[1], finish[1], easing);
+    const scaleZ = tick(start[2], finish[2], easing);
+
+    const scale = [scaleX, scaleY, scaleZ];
+
+    if (progress > 1) {
+      endCB();
+      return;
+    }
+
+    item.scale.set(...scale);
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+export const animateMove = (item, start, finish, duration, ease, endCB = () => {}) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) / duration;
+
+    const easing = easingFunc[`${ease}`](progress);
+
+    const positionX = tick(start[0], finish[0], easing);
+    const positionY = tick(start[1], finish[1], easing);
+    const positionZ = tick(start[2], finish[2], easing);
+
+    const position = [positionX, positionY, positionZ];
+
+    if (progress > 1) {
+      endCB();
+      return;
+    }
+
+    item.position.set(...position);
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+export const animateMoveY = (item, start, finish, duration, ease, endCB = () => { }) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) / duration;
+
+    const easing = easingFunc[`${ease}`](progress);
+
+    const positionY = tick(start, finish, easing);
+
+    if (progress > 1) {
+      endCB();
+      item.position.y = finish;
+      return;
+    }
+
+    item.position.y = positionY;
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
