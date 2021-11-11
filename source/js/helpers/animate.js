@@ -148,24 +148,6 @@ export const animateFPS = (render, duration, fps, endCB = () => {}) => {
 
 export const tick = (from, to, progress) => from + progress * (to - from);
 
-export const animareFluctuationIntroObj = (items) => {
-  let progress = 0;
-  let startTime = Date.now();
-
-  function loop() {
-
-    progress = (Date.now() - startTime) * 0.0001;
-
-    items.forEach(item => {
-      item.position.y = item.position.y + item.optAnim.amp * Math.sin((2 * Math.PI * progress) / item.optAnim.period);
-    });
-
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-};
-
 export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -174,7 +156,7 @@ export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = easingFunc[`${ease}`](progress);
+    const easing = easingFunc[ease](progress);
 
     items.forEach(item => {
       const scaleX = tick(item.optAnim.startScale[0], item.optAnim.finishScale[0], easing);
@@ -204,6 +186,26 @@ export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
   loop();
 };
 
+export const animareFluctuationIntroObj = (items) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) * 0.0001;
+
+    items.forEach(item => {
+      item.position.y = item.position.y + item.optAnim.amp * Math.sin((2 * Math.PI * progress) / item.optAnim.period);
+    });
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+
+
 export const animateScale = (item, start, finish, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -212,7 +214,7 @@ export const animateScale = (item, start, finish, duration, ease, endCB = () => 
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = easingFunc[`${ease}`](progress);
+    const easing = easingFunc[ease](progress);
 
     const scaleX = tick(start[0], finish[0], easing);
     const scaleY = tick(start[1], finish[1], easing);
@@ -233,35 +235,6 @@ export const animateScale = (item, start, finish, duration, ease, endCB = () => 
   loop();
 };
 
-export const animateMove = (item, start, finish, duration, ease, endCB = () => {}) => {
-  let progress = 0;
-  let startTime = Date.now();
-
-  function loop() {
-
-    progress = (Date.now() - startTime) / duration;
-
-    const easing = easingFunc[`${ease}`](progress);
-
-    const positionX = tick(start[0], finish[0], easing);
-    const positionY = tick(start[1], finish[1], easing);
-    const positionZ = tick(start[2], finish[2], easing);
-
-    const position = [positionX, positionY, positionZ];
-
-    if (progress > 1) {
-      endCB();
-      return;
-    }
-
-    item.position.set(...position);
-
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-};
-
 export const animateMoveY = (item, start, finish, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -270,7 +243,7 @@ export const animateMoveY = (item, start, finish, duration, ease, endCB = () => 
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = easingFunc[`${ease}`](progress);
+    const easing = easingFunc[ease](progress);
 
     const positionY = tick(start, finish, easing);
 
