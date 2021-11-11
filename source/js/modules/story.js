@@ -14,7 +14,10 @@ import {
   loadModel
 } from './StoryScene/utils/loadModel.js';
 import ModelObject from './StoryScene/utils/modelObject.js';
-
+import {
+  animateScale,
+  animateMoveY
+} from '../helpers/animate.js';
 
 export class Story {
   constructor() {
@@ -166,6 +169,10 @@ export class Story {
 
     this.isAnim = true;
 
+    this.suitcase;
+    this.suitcaseOnLoad = false;
+    this.suitcaseIaAnim = false;
+
     this.getSuitcase();
 
     this.render();
@@ -248,6 +255,7 @@ export class Story {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+    this.startAanimationsSuitcase();
     this.controls.update();
 
     if (this.isAnim) {
@@ -359,11 +367,12 @@ export class Story {
 
     loadModel(model, true, null, (mesh) => {
       mesh.position.set(-340, -805, -1480);
-      // mesh.scale.set(0.6, 0.6, 0.6);
+      mesh.scale.set(0, 0, 0);
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(-25), 0));
 
       suitcaseGroup.add(mesh);
       mesh.name = model.name;
+      this.suitcaseOnLoad = true;
       suitcaseGroup.add(mesh);
     });
     return suitcaseGroup;
@@ -373,6 +382,28 @@ export class Story {
     const suitcase = this.setSuitcase();
     this.suitcase = suitcase;
     this.scene.add(this.suitcase);
+  }
+
+  startAanimationsSuitcase() {
+    if (this.suitcaseOnLoad !== true || this.suitcaseIaAnim !== true) {
+      return;
+    } else {
+      this.animationsSuitcase();
+      this.suitcaseIaAnim = false;
+    }
+  }
+
+  animationsSuitcase() {
+    const duration = 400;
+    const suitcase = this.suitcase.getObjectByName('suitcase');
+    animateMoveY(suitcase, -700, -800, duration, 'easeInCubic');
+    animateScale(suitcase, [0.9, 0.9, 0.9], [0.85, 0.95, 0.9], duration, 'easeOutCubic', () => {
+      animateScale(suitcase, [0.85, 0.95, 0.9], [0.9, 0.9, 1], duration / 2, 'easeOutCubic', () => {
+        animateScale(suitcase, [0.9, 0.9, 1], [0.9, 0.95, 0.85], duration / 3, 'easeOutCubic', () => {
+          animateScale(suitcase, [0.9, 0.95, 0.85], [0.9, 0.9, 0.9], duration / 3, 'easeOutCubic');
+        });
+      });
+    });
   }
 
   appendRendererToDOMElement(renderer, targetNode) {
