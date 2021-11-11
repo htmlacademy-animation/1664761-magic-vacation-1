@@ -17,6 +17,9 @@ import {
   loadModel
 } from './utils/loadModel.js';
 import ModelObject from '../StoryScene/utils/modelObject.js';
+import {
+  animSonya
+} from '../../helpers/animate.js';
 
 
 class StoryScene4 extends THREE.Group {
@@ -25,6 +28,9 @@ class StoryScene4 extends THREE.Group {
 
     this.wall;
     this.floor;
+
+    this.startTime = -1;
+    this.counterLoadObj = 0;
 
     this.isDark = true;
 
@@ -42,6 +48,7 @@ class StoryScene4 extends THREE.Group {
   }
 
   getWall() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('wallCornerUnit').getObject();
 
     loadModel(model, true, setMaterial({
@@ -55,6 +62,7 @@ class StoryScene4 extends THREE.Group {
   }
 
   getFloor() {
+    this.counterLoadObj += 1;
     const mesh = new Floor({
       color: colors.ShadowedDarkPurple,
       ...reflectivity.soft
@@ -63,6 +71,7 @@ class StoryScene4 extends THREE.Group {
   }
 
   addSceneStatic() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('scene4').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -72,6 +81,7 @@ class StoryScene4 extends THREE.Group {
   }
 
   getSaturn() {
+    this.counterLoadObj += 1;
     const saturn = new Saturn(this.isDark, true);
 
     saturn.position.set(350, 500, 200);
@@ -80,12 +90,14 @@ class StoryScene4 extends THREE.Group {
   }
 
   getRug() {
+    this.counterLoadObj += 1;
     const rug = new Rug(this.isDark);
 
     this.add(rug);
   }
 
   async getFlower() {
+    this.counterLoadObj += 1;
     loadSVG(`flower-scene-4`, true, (svgGroup) => {
       svgGroup.position.set(60, 420, 440);
       svgGroup.rotation.copy(new THREE.Euler(0, degToRadians(90), 0), `XYZ`);
@@ -96,6 +108,7 @@ class StoryScene4 extends THREE.Group {
   }
 
   getSonya() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('sonya').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -104,8 +117,26 @@ class StoryScene4 extends THREE.Group {
       mesh.position.set(450, 150, 300);
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(10), 0));
 
+      this.sonya = mesh;
+      this.sonya.getObjectByName(`RightHand`).rotation.y = -1.3;
+      this.sonya.getObjectByName(`LeftHand`).rotation.y = 1.3;
       this.add(mesh);
     });
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = new THREE.Clock();
+      return;
+    }
+
+    const t = this.startTime.getElapsedTime();
+
+    const sonya = this.sonya.getObjectByName(`Sonya_Null`);
+    const rightHand = this.sonya.getObjectByName(`RightHand`);
+    const leftHand = this.sonya.getObjectByName(`LeftHand`);
+
+    animSonya(t, sonya, rightHand, leftHand);
   }
 
 }

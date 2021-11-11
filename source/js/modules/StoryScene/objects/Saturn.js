@@ -61,7 +61,11 @@ class Saturn extends THREE.Group {
       color: this.color2,
       ...reflectivity.soft
     }));
-    this.ringMesh.rotation.copy(new THREE.Euler(degToRadians(15), 0, 0), `XYZ`);
+    this.ringMesh.rotation.copy(new THREE.Euler(0, 0, degToRadians(-10)), `XYZ`);
+
+    const topOffset = this.sphereBigMesh.position.y;
+    this.ringMesh.position.set(0, topOffset, 0);
+    this.ringMesh.name = 'ring';
 
     this.add(this.ringMesh);
   }

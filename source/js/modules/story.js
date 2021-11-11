@@ -255,6 +255,7 @@ export class Story {
 
   render() {
     this.renderer.render(this.scene, this.camera);
+    this.SceneAllStory.animationsScene(activeScene);
     this.startAanimationsSuitcase();
     this.controls.update();
 
@@ -288,21 +289,21 @@ export class Story {
     }
 
     if (i == 0) {
-      angle = 90;
-    } else if (i == 1) {
       angle = 0;
+    } else if (i == 1) {
+      angle = 90;
     } else if (i == 2) {
-      angle = -90;
-    } else if (i == 3) {
       angle = 180;
+    } else if (i == 3) {
+      angle = 270;
     }
 
     this.setCamera(angle);
   }
 
   setCamera(angle) {
-    const posX = 2250 * Math.cos(degToRadians(angle));
-    const posZ = 2250 * Math.sin(degToRadians(angle));
+    const posX = 2050 * Math.sin(degToRadians(angle));
+    const posZ = 2050 * Math.cos(degToRadians(angle));
 
     this.camera.position.set(this.SceneAllStory.position.x + posX, 800, this.SceneAllStory.position.z + posZ);
 
@@ -314,23 +315,7 @@ export class Story {
   }
 
   setPositionObj(obj, angle) {
-    let angleObj = 0;
-
-    switch (angle) {
-      case 90:
-        angleObj = 0;
-        break;
-      case 0:
-        angleObj = 90;
-        break;
-      case -90:
-        angleObj = 180;
-        break;
-      case 180:
-        angleObj = -90;
-        break;
-    }
-    obj.rotation.copy(new THREE.Euler(0, degToRadians(angleObj), 0));
+    obj.rotation.copy(new THREE.Euler(0, degToRadians(angle), 0));
     obj.position.set(this.camera.position.x, this.camera.position.y, this.camera.position.z);
   }
 
@@ -366,7 +351,7 @@ export class Story {
     const model = new ModelObject('suitcase').getObject();
 
     loadModel(model, true, null, (mesh) => {
-      mesh.position.set(-340, -805, -1480);
+      mesh.position.set(-350, -800, -1250);
       mesh.scale.set(0, 0, 0);
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(-25), 0));
 

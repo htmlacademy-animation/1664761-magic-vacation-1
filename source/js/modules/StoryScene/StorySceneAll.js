@@ -1,5 +1,7 @@
 import * as THREE from 'three';
-import { degToRadians } from '../../helpers/utilities.js';
+import {
+  degToRadians
+} from '../../helpers/utilities.js';
 import StoryScene1 from './StoryScene1.js';
 import StoryScene2 from './StoryScene2.js';
 import StoryScene3 from './StoryScene3.js';
@@ -53,6 +55,39 @@ class StorySceneAll extends THREE.Group {
     storyScene4.rotation.copy(new THREE.Euler(0, degToRadians(270), 0));
     this.storyScene4 = storyScene4;
     this.add(storyScene4);
+  }
+
+  animationsScene(activeScene) {
+    switch (activeScene) {
+      case 0:
+        if (this.children[0].children.length != this.children[0].counterLoadObj) {
+          return;
+        } else {
+          this.children[0].animations();
+        }
+        break;
+      case 1:
+        if (this.children[1].children.length != this.children[1].counterLoadObj) {
+          return;
+        } else {
+          this.children[1].animations();
+        }
+        break;
+      case 2:
+        if (this.children[2].children.length != this.children[2].counterLoadObj) {
+          return;
+        } else {
+          this.children[2].animations();
+        }
+        break;
+      case 3:
+        if (this.children[3].children.length != this.children[3].counterLoadObj) {
+          return;
+        } else {
+          this.children[3].animations();
+        }
+        break;
+    }
   }
 }
 

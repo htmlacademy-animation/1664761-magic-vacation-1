@@ -262,7 +262,7 @@ export const animateMove = (item, start, finish, duration, ease, endCB = () => {
   loop();
 };
 
-export const animateMoveY = (item, start, finish, duration, ease, endCB = () => { }) => {
+export const animateMoveY = (item, start, finish, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
 
@@ -286,4 +286,43 @@ export const animateMoveY = (item, start, finish, duration, ease, endCB = () => 
   }
 
   loop();
+};
+
+export const animDogTail = (t, item) => {
+
+  const progress = Math.floor(t % 6);
+
+  const amp = progress > 2 && progress < 6 ? 0.8 : 0.4;
+
+  item.rotation.x = amp * Math.sin((6 * Math.PI * t));
+};
+
+export const animSaturn = (t, amp, item1, item2) => {
+
+  const rotationX1 = amp * Math.sin((1 * Math.PI * t) / 2);
+  const rotationX2 = -0.2 * Math.sin((0.9 * Math.PI * t) / 2);
+
+  item1.rotation.x = rotationX1;
+  item2.rotation.x = rotationX2;
+};
+
+export const animLeaf = (t, item, amp, speed) => {
+
+  item.rotation.x = amp * Math.sin((Math.PI * easingFunc.easeOutElastic(t * speed)));
+};
+
+export const animConpass = (t, amp, item) => {
+  const rotationZ = amp * Math.sin((1.5 * Math.PI * t) / 2);
+
+  item.rotation.z = rotationZ;
+};
+
+export const animSonya = (t, item1, item2, item3) => {
+  const positionY = 10 * Math.sin((2 * Math.PI * t) / 2);
+
+  const rotationX1 = -0.05 * Math.sin((2 * Math.PI * t) / 2);
+
+  item1.position.y = positionY;
+  item2.rotation.y = -1.3 + rotationX1;
+  item3.rotation.y = 1.3 - rotationX1;
 };
