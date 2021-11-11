@@ -68204,7 +68204,7 @@ module.exports = code;
 /*!**************************************!*\
   !*** ./source/js/helpers/animate.js ***!
   \**************************************/
-/*! exports provided: Animation, animateFPS, tick, animareFluctuationIntroObj, animIntroObj, animateScale, animateMove, animateMoveY, animDogTail, animSaturn, animLeaf, animConpass, animSonya */
+/*! exports provided: Animation, animateFPS, tick, animIntroObj, animareFluctuationIntroObj, animateScale, animateMoveY, animDogTail, animSaturn, animLeaf, animConpass, animSonya */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -68212,10 +68212,9 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "Animation", function() { return Animation; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animateFPS", function() { return animateFPS; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "tick", function() { return tick; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animareFluctuationIntroObj", function() { return animareFluctuationIntroObj; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animIntroObj", function() { return animIntroObj; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animareFluctuationIntroObj", function() { return animareFluctuationIntroObj; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animateScale", function() { return animateScale; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animateMove", function() { return animateMove; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animateMoveY", function() { return animateMoveY; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animDogTail", function() { return animDogTail; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "animSaturn", function() { return animSaturn; });
@@ -68372,24 +68371,6 @@ const animateFPS = (render, duration, fps, endCB = () => {}) => {
 
 const tick = (from, to, progress) => from + progress * (to - from);
 
-const animareFluctuationIntroObj = (items) => {
-  let progress = 0;
-  let startTime = Date.now();
-
-  function loop() {
-
-    progress = (Date.now() - startTime) * 0.0001;
-
-    items.forEach(item => {
-      item.position.y = item.position.y + item.optAnim.amp * Math.sin((2 * Math.PI * progress) / item.optAnim.period);
-    });
-
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-};
-
 const animIntroObj = (items, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -68398,7 +68379,7 @@ const animIntroObj = (items, duration, ease, endCB = () => {}) => {
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][`${ease}`](progress);
+    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][ease](progress);
 
     items.forEach(item => {
       const scaleX = tick(item.optAnim.startScale[0], item.optAnim.finishScale[0], easing);
@@ -68428,6 +68409,26 @@ const animIntroObj = (items, duration, ease, endCB = () => {}) => {
   loop();
 };
 
+const animareFluctuationIntroObj = (items) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  function loop() {
+
+    progress = (Date.now() - startTime) * 0.0001;
+
+    items.forEach(item => {
+      item.position.y = item.position.y + item.optAnim.amp * Math.sin((2 * Math.PI * progress) / item.optAnim.period);
+    });
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
+
+
 const animateScale = (item, start, finish, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -68436,7 +68437,7 @@ const animateScale = (item, start, finish, duration, ease, endCB = () => {}) => 
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][`${ease}`](progress);
+    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][ease](progress);
 
     const scaleX = tick(start[0], finish[0], easing);
     const scaleY = tick(start[1], finish[1], easing);
@@ -68457,35 +68458,6 @@ const animateScale = (item, start, finish, duration, ease, endCB = () => {}) => 
   loop();
 };
 
-const animateMove = (item, start, finish, duration, ease, endCB = () => {}) => {
-  let progress = 0;
-  let startTime = Date.now();
-
-  function loop() {
-
-    progress = (Date.now() - startTime) / duration;
-
-    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][`${ease}`](progress);
-
-    const positionX = tick(start[0], finish[0], easing);
-    const positionY = tick(start[1], finish[1], easing);
-    const positionZ = tick(start[2], finish[2], easing);
-
-    const position = [positionX, positionY, positionZ];
-
-    if (progress > 1) {
-      endCB();
-      return;
-    }
-
-    item.position.set(...position);
-
-    requestAnimationFrame(loop);
-  }
-
-  loop();
-};
-
 const animateMoveY = (item, start, finish, duration, ease, endCB = () => {}) => {
   let progress = 0;
   let startTime = Date.now();
@@ -68494,7 +68466,7 @@ const animateMoveY = (item, start, finish, duration, ease, endCB = () => {}) => 
 
     progress = (Date.now() - startTime) / duration;
 
-    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][`${ease}`](progress);
+    const easing = _utilities_js__WEBPACK_IMPORTED_MODULE_0__["default"][ease](progress);
 
     const positionY = tick(start, finish, easing);
 
