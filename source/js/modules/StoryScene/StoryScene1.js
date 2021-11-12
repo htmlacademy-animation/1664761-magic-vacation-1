@@ -17,6 +17,10 @@ import {
   reflectivity
 } from '../../helpers/colorsAndReflection.js';
 import ModelObject from '../StoryScene/utils/modelObject.js';
+import {
+  animDogTail,
+  animSaturn
+} from '../../helpers/animate.js';
 
 
 class StoryScene1 extends THREE.Group {
@@ -25,6 +29,9 @@ class StoryScene1 extends THREE.Group {
 
     this.wall;
     this.floor;
+
+    this.startTime = -1;
+    this.counterLoadObj = 0;
 
     this.constructChildren();
   }
@@ -40,6 +47,7 @@ class StoryScene1 extends THREE.Group {
   }
 
   getWall() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('wallCornerUnit').getObject();
 
     loadModel(model, true, setMaterial({
@@ -53,6 +61,7 @@ class StoryScene1 extends THREE.Group {
   }
 
   getFloor() {
+    this.counterLoadObj += 1;
     const mesh = new Floor({
       color: colors.DarkPurple,
       ...reflectivity.soft
@@ -61,6 +70,7 @@ class StoryScene1 extends THREE.Group {
   }
 
   addSceneStatic() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('scene1').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -70,6 +80,7 @@ class StoryScene1 extends THREE.Group {
   }
 
   getFlower() {
+    this.counterLoadObj += 1;
     loadSVG(`flower`, true, (svgGroup) => {
       svgGroup.position.set(60, 420, 440);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(0), degToRadians(90), degToRadians(0)), `XYZ`);
@@ -80,20 +91,24 @@ class StoryScene1 extends THREE.Group {
   }
 
   getRug() {
+    this.counterLoadObj += 1;
     const rug = new Rug();
 
     this.add(rug);
   }
 
   getSaturn() {
+    this.counterLoadObj += 1;
     const saturn = new Saturn(false, true);
 
     saturn.position.set(350, 500, 200);
 
+    this.saturn = saturn;
     this.add(saturn);
   }
 
   getDog() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('dog').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -102,8 +117,25 @@ class StoryScene1 extends THREE.Group {
       mesh.position.set(500, 0, 430);
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(60), 0));
 
+      this.dog = mesh;
       this.add(mesh);
     });
+  }
+
+  animations() {
+    if (this.startTime < 0) {
+      this.startTime = new THREE.Clock();
+      return;
+    }
+
+    const t = this.startTime.getElapsedTime();
+
+    const ring = this.saturn.children.find(obj => {
+      return obj.name === 'ring';
+    });
+
+    animDogTail(t, this.dog.getObjectByName(`Tail`));
+    animSaturn(t, 0.02, this.saturn, ring);
   }
 
 }
