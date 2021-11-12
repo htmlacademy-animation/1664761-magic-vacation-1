@@ -19,7 +19,8 @@ import {
   OrbitControls
 } from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import {
-  animIntroObj
+  animIntroObj,
+  animSuitcaseIntro
 } from '../helpers/animate.js';
 
 
@@ -128,7 +129,8 @@ export default class Intro {
       this.flamingo,
       this.leaf,
       this.question,
-      this.snowflake
+      this.snowflake,
+      this.suitcase
     ];
 
     let i = 0;
@@ -238,6 +240,17 @@ export default class Intro {
       amp: 0.3,
       period: 0.2
     };
+
+    this.suitcase.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [0.7, 0.7, 0.7],
+      startPosition: [0, 0, 100],
+      finishPosition: [-70, -150, 400],
+      startRotation: [-100, 0, 0],
+      finishRotation: [20, -50, -10],
+      amp: -0.1,
+      period: 0.35
+    };
   }
 
   getAirplane() {
@@ -259,12 +272,19 @@ export default class Intro {
     const model = new ModelObject('suitcase').getObject();
 
     loadModel(model, true, null, (mesh) => {
-      mesh.name = model.name;
-      mesh.position.set(-80, -180, 150);
-      mesh.rotation.copy(new THREE.Euler(degToRadians(30), degToRadians(-135), degToRadians(15)), `XYZ`);
-      mesh.scale.set(0.6, 0.6, 0.6);
-      this.suitcase = mesh;
-      this.scene.add(mesh);
+      mesh.rotation.copy(new THREE.Euler(0, degToRadians(-90), 0));
+
+      const groupScale = this.getGroupSuitcase('scale', mesh);
+      const groupRotation = this.getGroupSuitcase('rotation', groupScale);
+      const groupPositionXY = this.getGroupSuitcase('positionXY', groupRotation);
+      const groupMove = this.getGroupSuitcase('move', groupPositionXY);
+
+      groupScale.scale.set(0, 0, 0);
+      groupMove.position.set(0, 0, 50);
+      groupRotation.rotation.copy(new THREE.Euler(degToRadians(-100), 0, 0));
+
+      this.suitcase = groupMove;
+      this.scene.add(this.suitcase);
     });
   }
 
@@ -297,7 +317,7 @@ export default class Intro {
       ...reflectivity.basic
     }));
 
-    dummyMesh.position.set(0, 0, 10);
+    dummyMesh.position.set(0, 0, 15);
     this.scene.add(dummyMesh);
   }
 
@@ -345,11 +365,19 @@ export default class Intro {
     });
   }
 
+  getGroupSuitcase(name, child) {
+    const group = new THREE.Group();
+    group.name = name;
+    group.add(child);
+    return group;
+  }
+
   startAnimimations() {
     const duration = 1500;
 
     this.setOptAnimObj();
 
     animIntroObj(this.objectsArr, duration, 'easeOutCubic');
+    animSuitcaseIntro(this.suitcase, duration, 'easeOutCubic');
   }
 }
