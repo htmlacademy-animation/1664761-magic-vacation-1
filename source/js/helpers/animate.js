@@ -332,6 +332,44 @@ export const animSuitcaseIntro = (item, duration, ease, endCB = () => {}) => {
   loop();
 };
 
+export const animAirplaneIntro = (item, duration, ease, endCB = () => {}) => {
+  let progress = 0;
+  let startTime = Date.now();
+
+  const groupScale = item.getObjectByName(`scale`);
+  const groupRotationAirplane = item.getObjectByName(`rotationAirplane`);
+  const groupPositionYZ = item.getObjectByName(`positionYZ`);
+  const groupRotationAxis = item.getObjectByName(`rotationAxis`);
+  const groupMove = item.getObjectByName(`move`);
+
+  function loop() {
+
+    progress = (Date.now() - startTime) / duration;
+
+    const easing = easingFunc[ease](progress);
+
+    const scale = setParamsXYZ(item.optAnim.startScale, item.optAnim.finishScale, easing);
+    const rotationAirplane = setParamsXYZ(item.optAnim.startRotationAirplane, item.optAnim.finishRotationAirplane, easing);
+    const positionYZ = setParamsXYZ(item.optAnim.startPositionYZ, item.optAnim.finishPositionYZ, easing);
+    const rotationAxis = tick(item.optAnim.startRotationAxis, item.optAnim.finishRotationAxis, easing);
+
+    groupScale.scale.set(...scale);
+    groupRotationAirplane.rotation.copy(new THREE.Euler(degToRadians(rotationAirplane[0]), degToRadians(rotationAirplane[1]), degToRadians(rotationAirplane[2]), 'YXZ'));
+    groupPositionYZ.position.set(...positionYZ);
+    groupRotationAxis.rotation.copy(new THREE.Euler(0, degToRadians(rotationAxis), 0));
+
+    if (progress > 1) {
+      animareFluctuationIntroObj([item]);
+      endCB();
+      return;
+    }
+
+    requestAnimationFrame(loop);
+  }
+
+  loop();
+};
+
 const setParamsXYZ = (start, finish, easing) => {
   let paramsArr = [];
 
