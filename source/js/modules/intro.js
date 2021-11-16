@@ -20,7 +20,8 @@ import {
 } from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
 import {
   animIntroObj,
-  animSuitcaseIntro
+  animSuitcaseIntro,
+  animAirplaneIntro
 } from '../helpers/animate.js';
 
 
@@ -251,6 +252,19 @@ export default class Intro {
       amp: -0.1,
       period: 0.35
     };
+
+    this.airplane.optAnim = {
+      startScale: [0, 0, 0],
+      finishScale: [1.1, 1.1, 1.1],
+      startRotationAirplane: [0, -90, -180],
+      finishRotationAirplane: [-30, -90, 30],
+      startPositionYZ: [0, 0, 0],
+      finishPositionYZ: [0, 230, -200],
+      startRotationAxis: 0,
+      finishRotationAxis: 200,
+      amp: 0.3,
+      period: 0.4
+    };
   }
 
   getAirplane() {
@@ -260,11 +274,18 @@ export default class Intro {
       color: model.color,
       ...model.reflectivity
     }), (mesh) => {
-      mesh.name = model.name;
-      mesh.position.set(150, 80, 100);
-      mesh.rotation.copy(new THREE.Euler(degToRadians(80), degToRadians(120), degToRadians(-30)), `XYZ`);
-      this.airplane = mesh;
-      this.scene.add(mesh);
+      const groupScale = this.getGroup('scale', mesh);
+      const groupRotationAirplane = this.getGroup('rotationAirplane', groupScale);
+      const groupPositionYZ = this.getGroup('positionYZ', groupRotationAirplane);
+      const groupRotationAxis = this.getGroup('rotationAxis', groupPositionYZ);
+      const groupMove = this.getGroup('move', groupRotationAxis);
+
+      groupScale.scale.set(0, 0, 0);
+      groupRotationAirplane.rotation.copy(new THREE.Euler(degToRadians(90), degToRadians(-90), 0));
+      groupMove.position.set(140, -170, 0);
+
+      this.airplane = groupMove;
+      this.scene.add(this.airplane);
     });
   }
 
@@ -274,10 +295,10 @@ export default class Intro {
     loadModel(model, true, null, (mesh) => {
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(-90), 0));
 
-      const groupScale = this.getGroupSuitcase('scale', mesh);
-      const groupRotation = this.getGroupSuitcase('rotation', groupScale);
-      const groupPositionXY = this.getGroupSuitcase('positionXY', groupRotation);
-      const groupMove = this.getGroupSuitcase('move', groupPositionXY);
+      const groupScale = this.getGroup('scale', mesh);
+      const groupRotation = this.getGroup('rotation', groupScale);
+      const groupPositionXY = this.getGroup('positionXY', groupRotation);
+      const groupMove = this.getGroup('move', groupPositionXY);
 
       groupScale.scale.set(0, 0, 0);
       groupMove.position.set(0, 0, 50);
@@ -365,7 +386,7 @@ export default class Intro {
     });
   }
 
-  getGroupSuitcase(name, child) {
+  getGroup(name, child) {
     const group = new THREE.Group();
     group.name = name;
     group.add(child);
@@ -379,5 +400,8 @@ export default class Intro {
 
     animIntroObj(this.objectsArr, duration, 'easeOutCubic');
     animSuitcaseIntro(this.suitcase, duration, 'easeOutCubic');
+    setTimeout(() => {
+      animAirplaneIntro(this.airplane, duration, 'easeOutCubic');
+    }, 500);
   }
 }
