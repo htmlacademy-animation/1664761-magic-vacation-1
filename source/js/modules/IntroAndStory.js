@@ -28,7 +28,7 @@ class IntroAndStory {
     this.startTime = -1;
 
     this.introGroupObj;
-    this.introSceneIaAnim = false;
+    this.introSceneIsAnim = false;
     this.SceneAllStory;
     this.suitcase;
     this.suitcaseOnLoad = false;
@@ -205,8 +205,8 @@ class IntroAndStory {
   animIntroScene() {
     if (this.introGroupObj.children.length != this.introGroupObj.counterLoadObj) {
       return;
-    } else if (this.introSceneIaAnim != true) {
-      this.introSceneIaAnim = true;
+    } else if (this.introSceneIsAnim != true) {
+      this.introSceneIsAnim = true;
       this.introGroupObj.startAnimimations();
     }
   }

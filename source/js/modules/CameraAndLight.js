@@ -52,7 +52,6 @@ class CameraAndLight extends THREE.Group {
     let progress = 0;
     let startTime = Date.now();
     const start = this.angle;
-    this.angle = finish;
     const thisObj = this;
 
     function loop() {
@@ -66,6 +65,7 @@ class CameraAndLight extends THREE.Group {
       if (progress > 1) {
         thisObj.rotation.copy(new THREE.Euler(0, degToRadians(finish), 0));
         endCB();
+        thisObj.angle = finish;
         return;
       }
 
