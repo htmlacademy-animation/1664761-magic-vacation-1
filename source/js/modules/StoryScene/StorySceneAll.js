@@ -59,6 +59,13 @@ class StorySceneAll extends THREE.Group {
 
   animationsScene(activeScene) {
     switch (activeScene) {
+      case 'fromIntro':
+        if (this.children[0].children.length != this.children[0].counterLoadObj) {
+          return;
+        } else {
+          this.children[0].animations();
+        }
+        break;
       case 0:
         if (this.children[0].children.length != this.children[0].counterLoadObj) {
           return;
