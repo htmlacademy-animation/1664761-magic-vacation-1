@@ -69218,7 +69218,6 @@ class CameraAndLight extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
     let progress = 0;
     let startTime = Date.now();
     const start = this.angle;
-    this.angle = finish;
     const thisObj = this;
 
     function loop() {
@@ -69232,6 +69231,7 @@ class CameraAndLight extends three__WEBPACK_IMPORTED_MODULE_0__["Group"] {
       if (progress > 1) {
         thisObj.rotation.copy(new three__WEBPACK_IMPORTED_MODULE_0__["Euler"](0, Object(_helpers_utilities_js__WEBPACK_IMPORTED_MODULE_1__["degToRadians"])(finish), 0));
         endCB();
+        thisObj.angle = finish;
         return;
       }
 
@@ -69375,7 +69375,7 @@ class IntroAndStory {
     this.startTime = -1;
 
     this.introGroupObj;
-    this.introSceneIaAnim = false;
+    this.introSceneIsAnim = false;
     this.SceneAllStory;
     this.suitcase;
     this.suitcaseOnLoad = false;
@@ -69552,8 +69552,8 @@ class IntroAndStory {
   animIntroScene() {
     if (this.introGroupObj.children.length != this.introGroupObj.counterLoadObj) {
       return;
-    } else if (this.introSceneIaAnim != true) {
-      this.introSceneIaAnim = true;
+    } else if (this.introSceneIsAnim != true) {
+      this.introSceneIsAnim = true;
       this.introGroupObj.startAnimimations();
     }
   }
