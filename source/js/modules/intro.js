@@ -1,6 +1,4 @@
 import * as THREE from 'three';
-import helperRawShaderMaterial from '../helpers/helperRawShaderMaterial';
-import SVGObject from './StoryScene/utils/svgObject.js';
 import {
   degToRadians
 } from '../helpers/utilities.js';
@@ -16,172 +14,18 @@ import {
   loadSVG
 } from './StoryScene/utils/svgLoader.js';
 import {
-  OrbitControls
-} from '../../../node_modules/three/examples/jsm/controls/OrbitControls.js';
-import {
   animIntroObj,
   animSuitcaseIntro,
   animAirplaneIntro
 } from '../helpers/animate.js';
 
-
-export default class Intro {
+class Intro extends THREE.Group {
   constructor() {
-    this.width = window.innerWidth;
-    this.height = window.innerHeight;
-    this.aspectRation = this.width / this.height;
+    super();
 
-    this.texture = {
-      src: './img/module-5/scenes-textures/scene-0.png',
-      options: {
-        hue: 0.0
-      }
-    };
-    this.textureWidth = 2048;
-    this.textureHeight = 1024;
-    this.textureRatio = this.textureWidth / this.textureHeight;
-
-    this.canvasId = 'canvas-intro';
-
-    this.render = this.render.bind(this);
-
-    this.isAnim = false;
-    this.checkObj = true;
-  }
-
-  setMaterial(options = {}) {
-    const {
-      color,
-      ...other
-    } = options;
-
-    return new THREE.MeshStandardMaterial({
-      color: new THREE.Color(color),
-      ...other
-    });
-  }
-
-  init() {
-    if (!this.initialized) {
-      this.prepareScene();
-      this.initialized = true;
-    }
-
-    this.isAnim = true;
-    this.animationRequest = requestAnimationFrame(this.render);
-  }
-
-  prepareScene() {
-    this.canvas = document.getElementById(this.canvasId);
-    this.canvas.width = this.width;
-    this.canvas.height = this.height;
-
-    this.scene = new THREE.Scene();
-
-    this.camera = new THREE.PerspectiveCamera(45, this.aspectRation, 0.1, 3000);
-    this.camera.position.z = 1405;
-
-    this.controls = new OrbitControls(this.camera, document.getElementById('top'));
-
-    this.color = new THREE.Color(0x5f458c);
-    this.alpha = 1;
-
-    this.renderer = new THREE.WebGLRenderer({
-      canvas: this.canvas
-    });
-    this.renderer.setClearColor(this.color, this.alpha);
-    this.renderer.setPixelRatio(window.devicePixelRatio);
-    this.renderer.setSize(this.width, this.height);
+    this.counterLoadObj = 0;
 
     this.constructChildren();
-
-    const loadManager = new THREE.LoadingManager();
-    const textureLoader = new THREE.TextureLoader(loadManager);
-    const loadedTexture = textureLoader.load(this.texture.src);
-
-    loadManager.onLoad = () => {
-      const geometry = new THREE.PlaneGeometry(1, 1);
-      const material = new THREE.RawShaderMaterial(helperRawShaderMaterial({
-        map: {
-          value: loadedTexture
-        },
-        options: {
-          value: this.texture.options
-        }
-      }));
-      const image = new THREE.Mesh(geometry, material);
-
-      image.scale.x = this.textureWidth;
-      image.scale.y = this.textureHeight;
-
-      const lights = this.getLight();
-      lights.position.z = this.camera.position.z;
-      this.scene.add(lights);
-
-      this.scene.add(image);
-      this.animObj();
-      this.render();
-    };
-  }
-
-  animObj() {
-    this.objectsArr = [
-      this.watermelon,
-      this.flamingo,
-      this.leaf,
-      this.question,
-      this.snowflake,
-      this.suitcase
-    ];
-
-    let i = 0;
-    this.objectsArr.forEach((item) => {
-      if (!item) {
-        i += 1;
-      }
-    });
-
-    if (i == 0) {
-      this.checkObj = false;
-      this.startAnimimations();
-    }
-  }
-
-  render() {
-    this.renderer.render(this.scene, this.camera);
-    this.controls.update();
-
-    if (this.checkObj) {
-      this.animObj();
-    }
-
-    if (this.isAnim) {
-      requestAnimationFrame(this.render);
-    } else {
-      cancelAnimationFrame(this.render);
-    }
-  }
-
-  stopAnim() {
-    this.isAnim = false;
-  }
-
-  getLight() {
-    const light = new THREE.Group();
-
-    let lightUnit = new THREE.DirectionalLight(new THREE.Color(`rgb(255,255,255)`), 0.5);
-    lightUnit.position.set(0, this.camera.position.z * Math.tan(degToRadians(-15)), this.camera.position.z);
-    light.add(lightUnit);
-
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(246,242,255)`), 0.5, 3000, 0.5);
-    lightUnit.position.set(-785, -350, 710);
-    light.add(lightUnit);
-
-    lightUnit = new THREE.PointLight(new THREE.Color(`rgb(245,254,255)`), 0.5, 3000, 0.5);
-    lightUnit.position.set(730, -800, 985);
-    light.add(lightUnit);
-
-    return light;
   }
 
   constructChildren() {
@@ -194,6 +38,18 @@ export default class Intro {
     this.getSuitcase();
     this.getWatermelon();
     this.getDummy();
+  }
+
+  setMaterial(options = {}) {
+    const {
+      color,
+      ...other
+    } = options;
+
+    return new THREE.MeshStandardMaterial({
+      color: new THREE.Color(color),
+      ...other
+    });
   }
 
   setOptAnimObj() {
@@ -268,6 +124,7 @@ export default class Intro {
   }
 
   getAirplane() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('airplane').getObject();
 
     loadModel(model, true, this.setMaterial({
@@ -285,11 +142,12 @@ export default class Intro {
       groupMove.position.set(140, -170, 0);
 
       this.airplane = groupMove;
-      this.scene.add(this.airplane);
+      this.add(this.airplane);
     });
   }
 
   getSuitcase() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('suitcase').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -305,11 +163,12 @@ export default class Intro {
       groupRotation.rotation.copy(new THREE.Euler(degToRadians(-100), 0, 0));
 
       this.suitcase = groupMove;
-      this.scene.add(this.suitcase);
+      this.add(this.suitcase);
     });
   }
 
   getWatermelon() {
+    this.counterLoadObj += 1;
     const model = new ModelObject('watermelon').getObject();
 
     loadModel(model, true, null, (mesh) => {
@@ -318,20 +177,22 @@ export default class Intro {
       mesh.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(0), degToRadians(130)), `XYZ`);
       mesh.scale.set(0, 0, 0);
       this.watermelon = mesh;
-      this.scene.add(mesh);
+      this.add(mesh);
     });
   }
 
   getKeyhole() {
+    this.counterLoadObj += 1;
     loadSVG(`keyhole`, true, (svgGroup) => {
       svgGroup.position.set(-1500, 1515, 0);
       svgGroup.scale.set(1.5, -1.5, 1.5);
 
-      this.scene.add(svgGroup);
+      this.add(svgGroup);
     });
   }
 
   getDummy() {
+    this.counterLoadObj += 1;
     const dummy = new THREE.PlaneGeometry(1000, 1000);
     const dummyMesh = new THREE.Mesh(dummy, this.setMaterial({
       color: colors.Purple,
@@ -339,50 +200,55 @@ export default class Intro {
     }));
 
     dummyMesh.position.set(0, 0, 15);
-    this.scene.add(dummyMesh);
+    this.dummy = dummyMesh;
+    this.add(dummyMesh);
   }
 
   getFlamingo() {
+    this.counterLoadObj += 1;
     loadSVG(`flamingo`, true, (svgGroup) => {
       svgGroup.position.set(-320, 390, 150);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(30), degToRadians(10)), `XYZ`);
       svgGroup.scale.set(0, 0, 0);
 
       this.flamingo = svgGroup;
-      this.scene.add(svgGroup);
+      this.add(svgGroup);
     });
   }
 
   getLeaf() {
+    this.counterLoadObj += 1;
     loadSVG(`leaf-intro`, true, (svgGroup) => {
       svgGroup.position.set(560, 230, 50);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(10), degToRadians(10), degToRadians(-60)), `XYZ`);
       svgGroup.scale.set(0, 0, 0);
 
       this.leaf = svgGroup;
-      this.scene.add(svgGroup);
+      this.add(svgGroup);
     });
   }
 
   getSnowflake() {
+    this.counterLoadObj += 1;
     loadSVG(`snowflake`, true, (svgGroup) => {
       svgGroup.position.set(-300, -10, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(20), degToRadians(20)), `XYZ`);
       svgGroup.scale.set(0, 0, 0);
 
       this.snowflake = svgGroup;
-      this.scene.add(svgGroup);
+      this.add(svgGroup);
     });
   }
 
   getQuestion() {
+    this.counterLoadObj += 1;
     loadSVG(`question`, true, (svgGroup) => {
       svgGroup.position.set(100, -310, 100);
       svgGroup.rotation.copy(new THREE.Euler(degToRadians(-10), degToRadians(10), degToRadians(20)), `XYZ`);
       svgGroup.scale.set(0, 0, 0);
 
       this.question = svgGroup;
-      this.scene.add(svgGroup);
+      this.add(svgGroup);
     });
   }
 
@@ -395,6 +261,13 @@ export default class Intro {
 
   startAnimimations() {
     const duration = 1500;
+    this.objectsArr = [
+      this.watermelon,
+      this.flamingo,
+      this.leaf,
+      this.question,
+      this.snowflake,
+    ];
 
     this.setOptAnimObj();
 
@@ -405,3 +278,6 @@ export default class Intro {
     }, 500);
   }
 }
+
+
+export default Intro;
