@@ -16,7 +16,8 @@ import {
 import {
   animIntroObj,
   animSuitcaseIntro,
-  animAirplaneIntro
+  animAirplaneIntro,
+  animOpacity
 } from '../helpers/animate.js';
 
 class Intro extends THREE.Group {
@@ -257,6 +258,16 @@ class Intro extends THREE.Group {
     group.name = name;
     group.add(child);
     return group;
+  }
+
+  hideDummy(dur, delay) {
+    setTimeout(() => {
+      animOpacity(this.dummy, 0, dur);
+    }, delay);
+  }
+
+  showDummy() {
+    this.dummy.material.opacity = 1;
   }
 
   startAnimimations() {

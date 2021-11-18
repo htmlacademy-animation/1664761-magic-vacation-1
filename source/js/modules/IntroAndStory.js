@@ -12,6 +12,7 @@ import {
   animateMoveY
 } from '../helpers/animate.js';
 import CameraAndLight from './CameraAndLight.js';
+import ModelObject from './StoryScene/utils/modelObject.js';
 
 class IntroAndStory {
   constructor() {
@@ -103,13 +104,15 @@ class IntroAndStory {
 
   setSuitcase() {
     const suitcaseGroup = new THREE.Group();
+    const model = new ModelObject('suitcase').getObject();
 
-    loadModel('suitcase', this.isShadow, null, (mesh) => {
-
+    loadModel(model, true, null, (mesh) => {
       mesh.position.set(-300, 0, 800);
       mesh.scale.set(0, 0, 0);
       mesh.rotation.copy(new THREE.Euler(0, degToRadians(-23), 0));
-      mesh.name = 'suitcase';
+
+      suitcaseGroup.add(mesh);
+      mesh.name = model.name;
       this.suitcaseOnLoad = true;
       suitcaseGroup.add(mesh);
     });
@@ -123,7 +126,7 @@ class IntroAndStory {
     this.cameraAndLight.addChild(this.suitcase);
   }
 
-  startAanimationsSuitcase() {
+  startAnimationsSuitcase() {
     if (this.suitcaseOnLoad != true || this.suitcaseIsAnim != true) {
       return;
     } else {
@@ -180,7 +183,10 @@ class IntroAndStory {
         this.cameraAndLight.setCameraIntro();
         break;
       case 'fromIntro':
-        this.cameraAndLight.animIntroToStory();
+        this.cameraAndLight.animIntroToStory(() => {
+          this.introGroupObj.showDummy();
+        });
+        this.introGroupObj.hideDummy(300, 100);
         break;
       case 0:
         angle = 0;
@@ -215,7 +221,7 @@ class IntroAndStory {
     this.renderer.render(this.scene, this.camera);
     this.animIntroScene();
     this.SceneAllStory.animationsScene(this.activeScene);
-    this.startAanimationsSuitcase();
+    this.startAnimationsSuitcase();
 
     if (this.isAnim) {
       requestAnimationFrame(this.render);
