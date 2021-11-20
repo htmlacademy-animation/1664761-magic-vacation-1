@@ -16,15 +16,20 @@ class CameraAndLight extends THREE.Group {
     directionalLight.target = storyGroup;
 
     let cameraAndLightGroup = new THREE.Group();
+    let cameraMouseRotationRig = new THREE.Group();
 
-    cameraAndLightGroup.add(camera, directionalLight);
+    cameraMouseRotationRig.add(camera);
+    cameraAndLightGroup.add(cameraMouseRotationRig, directionalLight);
 
     this.add(cameraAndLightGroup);
+
+    this.isIntroScene = true;
 
     this.activeObjects = {
       camera,
       introGroup,
       storyGroup,
+      cameraMouseRotationRig,
       cameraAndLightGroup,
     };
   }
@@ -79,6 +84,23 @@ class CameraAndLight extends THREE.Group {
     }
 
     loop();
+  }
+
+  setCameraRotation(coef) {
+    const {
+      cameraMouseRotationRig,
+      camera,
+      storyGroup,
+      introGroup
+    } = this.activeObjects;
+
+    cameraMouseRotationRig.position.y = coef * 50;
+
+    if (this.isIntroScene) {
+      camera.lookAt(introGroup.position.x, introGroup.position.y, introGroup.position.z);
+    } else {
+      camera.lookAt(storyGroup.position.x, storyGroup.position.y, storyGroup.position.z);
+    }
   }
 
   animIntroToStory(endCB) {
