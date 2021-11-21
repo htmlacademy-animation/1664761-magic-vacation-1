@@ -25,10 +25,10 @@ export default () => {
               introAndStory.setStory(1);
             } else if (storySlider.activeIndex === 4 || storySlider.activeIndex === 5) {
               introAndStory.setStory(2);
-              $('body').addClass('story-slide-3');
+              bodyDOM.classList.add('story-slide-3');
             } else if (storySlider.activeIndex === 6 || storySlider.activeIndex === 7) {
               introAndStory.setStory(3);
-              $('body').addClass('story-slide-4');
+              bodyDOM.classList.add('story-slide-4');
             }
           },
           resize: () => {

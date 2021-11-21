@@ -61,6 +61,7 @@ class StoryScene3 extends THREE.Group {
       color: colors.MountainBlue,
       ...reflectivity.soft
     });
+    mesh.scale.set(1.5, 1.5, 1.5);
     this.add(mesh);
   }
 
