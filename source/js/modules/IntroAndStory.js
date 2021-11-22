@@ -14,6 +14,8 @@ import {
 import CameraAndLight from './CameraAndLight.js';
 import ModelObject from './StoryScene/utils/modelObject.js';
 
+export let isScenery;
+
 class IntroAndStory {
   constructor() {
     this.width = window.innerWidth;
@@ -47,6 +49,8 @@ class IntroAndStory {
     this.canvas = document.getElementById(this.canvasID);
     this.canvas.width = this.width;
     this.canvas.height = this.height;
+
+    this.isScenery();
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas
@@ -93,6 +97,7 @@ class IntroAndStory {
 
   addSceneIntro() {
     const sceneIntro = new SceneIntro();
+    this.sceneIntro = sceneIntro;
 
     sceneIntro.scale.set(1, 1, 1);
     sceneIntro.position.set(0, 0, 0);
@@ -244,6 +249,10 @@ class IntroAndStory {
     }
   }
 
+  isScenery() {
+    isScenery = window.innerHeight < window.innerWidth;
+  }
+
   updateSize() {
     this.width = window.innerWidth;
     this.height = window.innerHeight;
@@ -253,9 +262,13 @@ class IntroAndStory {
 
     this.aspectRation = this.width / this.height;
 
+    this.isScenery();
+
     this.camera.aspect = this.aspectRation;
     this.camera.updateProjectionMatrix();
     this.renderer.setSize(this.width, this.height);
+
+    this.sceneIntro.setPositionIntroObj();
   }
 }
 

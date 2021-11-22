@@ -6,6 +6,11 @@ import {
 import {
   degToRadians
 } from './utilities.js';
+import {
+  isScenery
+} from '..//modules/IntroAndStory.js';
+
+export let isFinishFirsAnimObj = false;
 
 export class Animation {
   constructor(options) {
@@ -162,15 +167,24 @@ export const animIntroObj = (items, duration, ease, endCB = () => {}) => {
 
     const easing = easingFunc[ease](progress);
 
+    let finishPosition;
+
     items.forEach(item => {
+      if (isScenery) {
+        finishPosition = item.optAnim.finishPositionLS;
+      } else {
+        finishPosition = item.optAnim.finishPositionPO;
+      }
+
       const scale = setParamsXYZ(item.optAnim.startScale, item.optAnim.finishScale, easing);
-      const position = setParamsXYZ(item.optAnim.startPosition, item.optAnim.finishPosition, easing);
+      const position = setParamsXYZ(item.optAnim.startPosition, finishPosition, easing);
 
       item.scale.set(...scale);
       item.position.set(...position);
     });
 
     if (progress > 1) {
+      isFinishFirsAnimObj = true;
       animareFluctuationIntroObj(items);
       endCB();
       return;
@@ -251,6 +265,20 @@ export const animateMoveY = (item, start, finish, duration, ease, endCB = () => 
   }
 
   loop();
+};
+
+export const setPositionIntroObj = (items) => {
+  let finishPosition;
+
+  items.forEach((item) => {
+    if (isScenery) {
+      finishPosition = item.optAnim.finishPositionLS;
+    } else {
+      finishPosition = item.optAnim.finishPositionPO;
+    }
+
+    item.position.set(...finishPosition);
+  });
 };
 
 export const animDogTail = (t, item) => {
