@@ -1,14 +1,12 @@
 import * as THREE from 'three';
 import easingFunc from './utilities.js';
 import {
-  activeScene
-} from '../modules/story.js';
-import {
   degToRadians
 } from './utilities.js';
 import {
-  isScenery
-} from '..//modules/IntroAndStory.js';
+  isScenery,
+  activeScene
+} from '../modules/IntroAndStory.js';
 
 export let isFinishFirsAnimObj = false;
 
@@ -147,8 +145,11 @@ export const animateFPS = (render, duration, fps, endCB = () => {}) => {
       lastFrameUpdateTime = currentTime;
       render(progress);
     }
-    if (activeScene == 1) {
+
+    if (activeScene === 1) {
       requestAnimationFrame(loop);
+    } else {
+      render(1);
     }
   }
 
