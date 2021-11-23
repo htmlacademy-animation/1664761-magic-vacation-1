@@ -133,6 +133,7 @@ class IntroAndStory {
 
     this.renderer = new THREE.WebGLRenderer({
       canvas: this.canvas,
+      logarithmicDepthBuffer: true
     });
     this.renderer.setClearColor(0x5f458c, 1);
     this.renderer.setPixelRatio(window.devicePixelRatio);
