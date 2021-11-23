@@ -69227,6 +69227,7 @@ class IntroAndStory {
 
     this.renderer = new three__WEBPACK_IMPORTED_MODULE_0__["WebGLRenderer"]({
       canvas: this.canvas,
+      logarithmicDepthBuffer: true
     });
     this.renderer.setClearColor(0x5f458c, 1);
     this.renderer.setPixelRatio(window.devicePixelRatio);
@@ -70339,13 +70340,39 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
   uniforms,
   vertexShader: `
+    #ifdef USE_LOGDEPTHBUF
+      #define EPSILON 1e-6
+      #ifdef USE_LOGDEPTHBUF_EXT
+        varying float vFragDepth;
+      #endif
+      uniform float logDepthBufFC;
+    #endif
+
     varying vec2 vUv;
     void main() {
       vUv = uv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      #ifdef USE_LOGDEPTHBUF
+        gl_Position.z = log2(max( EPSILON, gl_Position.w + 1.0 )) * logDepthBufFC;
+        #ifdef USE_LOGDEPTHBUF_EXT
+          vFragDepth = 1.0 + gl_Position.w;
+        #else
+          gl_Position.z = (gl_Position.z - 1.0) * gl_Position.w;
+        #endif
+      #endif
+
     }
     `,
   fragmentShader: `
+    #ifdef USE_LOGDEPTHBUF
+      #ifdef USE_LOGDEPTHBUF_EXT
+        #extension GL_EXT_frag_depth : enable
+        varying float vFragDepth;
+      #endif
+      uniform float logDepthBufFC;
+    #endif
+
     varying vec2 vUv;
     uniform vec3 baseColor;
     uniform vec3 stripeColor;
@@ -70366,6 +70393,9 @@ __webpack_require__.r(__webpack_exports__);
       {
         gl_FragColor = vec4(baseColor, 1.0);
       }
+      #if defined(USE_LOGDEPTHBUF) && defined(USE_LOGDEPTHBUF_EXT)
+        gl_FragDepthEXT = log2(vFragDepth) * logDepthBufFC * 0.5;
+      #endif
     }
     `
 }));
@@ -70385,13 +70415,38 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony default export */ __webpack_exports__["default"] = ((uniforms) => ({
   uniforms,
   vertexShader: `
+    #ifdef USE_LOGDEPTHBUF
+      #define EPSILON 1e-6
+      #ifdef USE_LOGDEPTHBUF_EXT
+        varying float vFragDepth;
+      #endif
+      uniform float logDepthBufFC;
+    #endif
+
     varying vec2 vUv;
     void main() {
       vUv = uv;
       gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+
+      #ifdef USE_LOGDEPTHBUF
+        gl_Position.z = log2(max( EPSILON, gl_Position.w + 1.0 )) * logDepthBufFC;
+        #ifdef USE_LOGDEPTHBUF_EXT
+          vFragDepth = 1.0 + gl_Position.w;
+        #else
+          gl_Position.z = (gl_Position.z - 1.0) * gl_Position.w;
+        #endif
+      #endif
     }
     `,
   fragmentShader: `
+    #ifdef USE_LOGDEPTHBUF
+      #ifdef USE_LOGDEPTHBUF_EXT
+        #extension GL_EXT_frag_depth : enable
+        varying float vFragDepth;
+      #endif
+      uniform float logDepthBufFC;
+    #endif
+
     varying vec2 vUv;
     uniform vec3 baseColor;
     uniform vec3 stripeColor;
@@ -70406,6 +70461,9 @@ __webpack_require__.r(__webpack_exports__);
       {
         gl_FragColor = vec4(baseColor, 1.0);
       }
+      #if defined(USE_LOGDEPTHBUF) && defined(USE_LOGDEPTHBUF_EXT)
+        gl_FragDepthEXT = log2(vFragDepth) * logDepthBufFC * 0.5;
+      #endif
     }
     `
 }));
