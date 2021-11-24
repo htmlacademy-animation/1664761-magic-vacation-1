@@ -3508,6 +3508,18 @@ img {
     opacity: 0;
   }
 }
+.screen--game .screen__picture.--sonya .screen__image {
+  display: block;
+  object-fit: contain;
+  width: 32.7rem;
+  height: 36.9rem;
+}
+@media (min-width: 2000px) {
+  .screen--game .screen__picture.--sonya .screen__image {
+    width: 32.7rem;
+    height: 36.9rem;
+  }
+}
 
 .screen--result {
   position: absolute;
