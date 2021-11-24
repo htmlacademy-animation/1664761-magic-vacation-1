@@ -327,6 +327,18 @@
     @media (max-width: $tablet) and (orientation: portrait) {
       opacity: 0;
     }
+
+    .screen__image {
+      display: block;
+      object-fit: contain;
+      width: 32.7rem;
+      height: 36.9rem;
+
+      @media (min-width: $stop-scaling) {
+        width: 32.7rem;
+        height: 36.9rem;
+      }
+    }
   }
 }
 
