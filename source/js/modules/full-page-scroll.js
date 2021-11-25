@@ -1,6 +1,7 @@
 import throttle from 'lodash/throttle';
 import timer from './timer.js';
 import prizes from './prizes.js';
+import SonyaAnimation from './sonya-animation';
 
 
 export default class FullPageScroll {
@@ -74,9 +75,11 @@ export default class FullPageScroll {
       removeStoryClass();
       this.changeVisibilityDisplay();
       timer();
+      SonyaAnimation.start();
     } else {
       removeStoryClass();
       this.changeVisibilityDisplay();
+      SonyaAnimation.end();
     }
     this.changeActiveMenuItem();
     this.emitChangeDisplayEvent();
@@ -121,4 +124,5 @@ export default class FullPageScroll {
       this.activeScreen = Math.max(0, --this.activeScreen);
     }
   }
+
 }
