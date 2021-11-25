@@ -125,7 +125,7 @@ const local = {
 };
 
 
-export default class crocodileCanvas extends canvasScene {
+export default class CrocodileCanvas extends canvasScene {
   constructor(options) {
     const canvas = options.canvas;
 
