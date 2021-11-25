@@ -57,7 +57,12 @@ class SonyaAnimation {
   }
 
   end() {
+    if (!this.sonya || !this.showAnim) {
+      return;
+    }
+
     this.showAnim.cancel();
+
     if (this.idle) {
       this.idle.cancel();
     }

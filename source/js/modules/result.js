@@ -1,5 +1,5 @@
-import seacalfScene from './seacalfCanvas.js';
-import crocodileScene from './crocodileCanvas.js';
+import SeacalfScene from './seacalfCanvas.js';
+import CrocodileScene from './crocodileCanvas.js';
 
 export default () => {
   let showResultEls = document.querySelectorAll(`.js-show-result`);
@@ -27,7 +27,7 @@ export default () => {
             animResult[j].beginElement();
           }
 
-          let seacalfCanvasAnimate = new seacalfScene({
+          let seacalfCanvasAnimate = new SeacalfScene({
             canvas: document.querySelector("#seacalf-canvas")
           });
 
@@ -56,7 +56,7 @@ export default () => {
 
           animTimeOut();
 
-          let crocodileCanvasAnimate = new crocodileScene({
+          let crocodileCanvasAnimate = new CrocodileScene({
             canvas: document.querySelector("#crocodile-canvas")
           });
 

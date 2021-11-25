@@ -104,7 +104,7 @@ const local = {
   },
 };
 
-export default class seacalfScene extends canvasScene {
+export default class SeacalfScene extends canvasScene {
   constructor(options) {
     const canvas = options.canvas;
 
